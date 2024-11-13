@@ -1,38 +1,242 @@
-.App {
+.navbar {
+  background-color: #aec1fc;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  justify-content: space-between; /* Đảm bảo các phần tử trong thanh menu không bị xô lệch */
+}
+
+.menu-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.menu-item.logo {
+  font-family: 'Pacifico', cursive;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  width: 40px;
+  height: auto;
+  margin-right: 10px;
+}
+
+.menu-right {
+  display: flex;
+  margin-left: auto; /* Đẩy menu sang bên phải */
+}
+
+.menu-item.right {
+  font-family: 'League Spartan', sans-serif;
+  color: #3758be;
+  font-size: 25px;
+  font-weight: 900;
+  padding: 15px;
+}
+
+.menu-item:hover {
+  background-color: #8a9ae8;
+  border-radius: 5px;
+}
+
+/* Menu button */
+.hamburger-btn {
+  background: none;
+  border: none;
+  font-size: 50px; 
+  color: white;
+  cursor: pointer;
+  padding: 0; 
+  margin-right: 20px; 
+  margin-left: 10px;
+  line-height: 1; 
+}
+
+
+.dropdown-menu {
+  display: none; 
+  background-color: #aec1fc;
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #8a9ae8;
+  border-radius: 5px;
+}
+
+
+.dropdown-menu.active {
+  display: block;
+}
+
+@media screen and (max-width: 768px) {
+  .menu {
+    display: none; 
+  }
+
+  .menu.active {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+  }
+
+  .hamburger-btn {
+    display: block;
+  }
+}
+/* Hero Section */
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #4A90E2; 
+  padding: 50px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
+  color: white;
+  margin-top: 20px;
+  width: 100%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Hero Section */
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white; 
+  padding: 50px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  color: #3758be; 
+  margin-top: 20px;
+  width: 100%;
+  font-family: 'League Spartan', sans-serif; 
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* Text trong Hero Section */
+.hero h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.hero h2 {
+  font-size: 2rem;
+  margin-top: 10px;
+  font-weight: normal;
+}
+
+/* Image container */
+.image-container {
+  margin-top: 30px;
+}
+
+.animated-image {
+  max-width: 100%;
+  height: auto;
+  animation: fadeIn 2s ease-in-out;
+}
+
+/* Animation fade-in */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Searching bar */
+.search-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  margin-top: 20px;
+  padding: 20px;
+}
+
+.search-box {
+  width: 500px;
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 17px;
+  margin-right: 10px;
+}
+
+.search-btn {
+  padding: 10px 20px;
+  background-color: #3758be;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.search-btn:hover {
+  background-color: #2a4a88;
+}
+
+/* Data table */
+.table-container {
+  width: 90%;
+  margin: 0px auto;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #3758be;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.table tr:hover {
+  background-color: #f1f1f1;
 }
