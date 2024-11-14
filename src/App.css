@@ -14,7 +14,7 @@
   margin: 0;
   padding: 0;
   width: 100%;
-  justify-content: space-between; /* Đảm bảo các phần tử trong thanh menu không bị xô lệch */
+  justify-content: space-between; 
 }
 
 .menu-item {
@@ -22,14 +22,16 @@
   cursor: pointer;
 }
 
-.menu-item.logo {
-  font-family: 'Pacifico', cursive;
-  color: #ffffff;
+.menu-item.logo a {
+  text-decoration: none; /* Removes underline */
+  color: #ffffff; /* Sets color to white */
+  font-family: 'Pacifico', cursive; /* Ensures font is Pacifico */
   font-weight: bold;
   font-size: 30px;
   display: flex;
   align-items: center;
 }
+
 
 .logo-img {
   width: 40px;
@@ -39,7 +41,7 @@
 
 .menu-right {
   display: flex;
-  margin-left: auto; /* Đẩy menu sang bên phải */
+  margin-left: auto; 
 }
 
 .menu-item.right {
@@ -239,4 +241,48 @@
 
 .table tr:hover {
   background-color: #f1f1f1;
+}
+/*Contact*/
+.contact-page {
+  max-width: 600px; /* Đặt giới hạn chiều rộng */
+  margin: 50px auto; /* Căn giữa nội dung */
+  padding: 20px;
+  background-color: #f4f8ff; /* Màu nền nhẹ nhàng */
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  font-family: 'League Spartan', sans-serif;
+  color: #3758be;
+  text-align: center;
+}
+
+.contact-page h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #3758be;
+}
+
+.contact-page p {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.contact-page p a {
+  color: #3758be;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.contact-page p a:hover {
+  text-decoration: underline;
+}
+
+.contact-page p a:active {
+  color: #2b3f91;
+}
+.contact-title {
+  font-family: 'Red Hat Display', sans-serif;
+  color: #003c64;
+  font-size: 36px; /* Adjust size as needed */
+  font-weight: bold; /* Adjust weight if necessary */
+  margin-bottom: 20px;
 }
