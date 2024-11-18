@@ -1,10 +1,24 @@
+/* General Styles */
+body, html {
+  font-family: 'League Spartan', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;  /* Đảm bảo chiều cao của body và html là 100% */
+  overflow-x: hidden;  /* Ngăn cuộn ngang */
+  overflow-y: auto;  /* Cho phép cuộn dọc */
+}
+
+/* Navbar */
 .navbar {
   background-color: #aec1fc;
-  padding: 5px;
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .menu {
@@ -13,25 +27,22 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  width: 100%;
-  justify-content: space-between; 
 }
 
 .menu-item {
-  padding: 10px;
+  padding: 10px 15px;
   cursor: pointer;
 }
 
 .menu-item.logo a {
-  text-decoration: none; /* Removes underline */
-  color: #ffffff; /* Sets color to white */
-  font-family: 'Pacifico', cursive; /* Ensures font is Pacifico */
+  text-decoration: none;
+  color: #ffffff;
+  font-family: 'Pacifico', cursive;
   font-weight: bold;
   font-size: 30px;
   display: flex;
   align-items: center;
 }
-
 
 .logo-img {
   width: 40px;
@@ -41,15 +52,14 @@
 
 .menu-right {
   display: flex;
-  margin-left: auto; 
+  margin-left: auto;
 }
 
 .menu-item.right {
-  font-family: 'League Spartan', sans-serif;
   color: #3758be;
-  font-size: 25px;
-  font-weight: 900;
-  padding: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px 15px;
 }
 
 .menu-item:hover {
@@ -57,36 +67,33 @@
   border-radius: 5px;
 }
 
-/* Menu button */
 .hamburger-btn {
   background: none;
   border: none;
-  font-size: 50px; 
+  font-size: 30px;
   color: white;
   cursor: pointer;
-  padding: 0; 
-  margin-right: 20px; 
-  margin-left: 10px;
-  line-height: 1; 
+  display: none; /* Hidden by default */
 }
 
-
 .dropdown-menu {
-  display: none; 
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 20px;
   background-color: #aec1fc;
   list-style: none;
   padding: 10px;
-  margin: 0;
-  position: absolute;
-  top: 50px;
-  right: 20px;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .dropdown-item {
-  padding: 8px;
+  padding: 10px 15px;
+  color: #3758be;
   cursor: pointer;
+  font-size: 18px;
+  text-align: center;
 }
 
 .dropdown-item:hover {
@@ -94,84 +101,51 @@
   border-radius: 5px;
 }
 
-
 .dropdown-menu.active {
   display: block;
 }
 
-@media screen and (max-width: 768px) {
-  .menu {
-    display: none; 
-  }
-
-  .menu.active {
-    display: flex; 
-    flex-direction: column; 
-    align-items: center;
-  }
-
-  .hamburger-btn {
-    display: block;
-  }
-}
 /* Hero Section */
 .hero {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  background-color: #4A90E2; 
-  padding: 50px 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  color: white;
-  margin-top: 20px;
-  width: 100%;
+  justify-content: space-between;
+  padding: 40px;
+  background-color: #ffffff;
+  gap: 20px; /* Consistent spacing */
+  min-height: 100vh;  /* Đảm bảo phần tử hero có chiều cao ít nhất bằng chiều cao màn hình */
+  flex-wrap: wrap; /* Cho phép gói gọn nội dung khi trên màn hình nhỏ */
+  box-sizing: border-box; /* Đảm bảo không có cuộn thừa */
 }
 
-/* Hero Section */
-.hero {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: white; 
-  padding: 50px 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  color: #3758be; 
-  margin-top: 20px;
-  width: 100%;
-  font-family: 'League Spartan', sans-serif; 
+.text-container {
+  max-width: 50%;
 }
 
-/* Text trong Hero Section */
-.hero h1 {
-  font-size: 3rem;
-  font-weight: bold;
+.hero h1,
+.hero h2 {
   margin: 0;
+  padding: 0;
+  color: #3758be;
+}
+
+.hero h1 {
+  font-size: 96px; /* Adjust for responsiveness */
+  font-weight: bold;
 }
 
 .hero h2 {
-  font-size: 2rem;
+  font-size: 48px; /* Adjust for responsiveness */
   margin-top: 10px;
   font-weight: normal;
 }
 
-/* Image container */
-.image-container {
-  margin-top: 30px;
-}
-
 .animated-image {
-  max-width: 100%;
+  max-width: 50%; /* Adjusted for better responsiveness */
   height: auto;
-  animation: fadeIn 2s ease-in-out;
 }
 
-/* Animation fade-in */
+/* Animation */
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -181,20 +155,21 @@
   }
 }
 
-/* Searching bar */
+/* Search Bar */
 .search-container {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin: 20px 0;
   padding: 20px;
 }
 
 .search-box {
-  width: 500px;
+  width: 100%;
+  max-width: 500px;
   padding: 15px;
   border-radius: 5px;
   border: 1px solid #ccc;
-  font-size: 17px;
+  font-size: 16px;
   margin-right: 10px;
 }
 
@@ -205,21 +180,23 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 17px;
+  font-size: 16px;
 }
 
 .search-btn:hover {
   background-color: #2a4a88;
 }
 
-/* Data table */
+/* Data Table */
 .table-container {
   width: 90%;
-  margin: 0px auto;
+  margin: 20px auto;
   border: 1px solid #ccc;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow-x: auto;
+  margin-top: 60px;
+  padding: 20px;  /* Thêm padding cho phần bảng để tránh bị cắt */
 }
 
 .table {
@@ -242,47 +219,126 @@
 .table tr:hover {
   background-color: #f1f1f1;
 }
-/*Contact*/
+
+/* Contact Page */
 .contact-page {
-  max-width: 600px; /* Đặt giới hạn chiều rộng */
-  margin: 50px auto; /* Căn giữa nội dung */
+  max-width: 600px;
+  margin: 50px auto;
   padding: 20px;
-  background-color: #f4f8ff; /* Màu nền nhẹ nhàng */
+  background-color: #f4f8ff;
   border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
-  font-family: 'League Spartan', sans-serif;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   color: #3758be;
   text-align: center;
 }
 
-.contact-page h1 {
-  font-size: 36px;
-  margin-bottom: 20px;
-  color: #3758be;
-}
-
-.contact-page p {
-  font-size: 18px;
-  margin: 10px 0;
-}
-
-.contact-page p a {
-  color: #3758be;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.contact-page p a:hover {
-  text-decoration: underline;
-}
-
-.contact-page p a:active {
-  color: #2b3f91;
-}
 .contact-title {
   font-family: 'Red Hat Display', sans-serif;
   color: #003c64;
-  font-size: 36px; /* Adjust size as needed */
-  font-weight: bold; /* Adjust weight if necessary */
+  font-size: 36px;
+  font-weight: bold;
   margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .menu-right {
+    display: none;
+  }
+
+  .hamburger-btn {
+    display: block;
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    flex-direction: column;
+    width: 200px;
+    z-index: 100;
+  }
+
+  .dropdown-menu.active {
+    display: flex;
+  }
+
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .animated-image {
+    max-width: 80%; /* Adjusted for mobile screens */
+    margin-top: 20px;
+  }
+
+  .hero h1 {
+    font-size: 64px; /* Smaller size for mobile */
+  }
+
+  .hero h2 {
+    font-size: 32px; /* Smaller size for mobile */
+  }
+}
+
+/* Hiệu ứng sóng dưới logo */
+.wave {
+  position: relative;
+  width: 100%;
+  height: 5px;
+  background-color: #3758be; /* Màu của sóng */
+  margin-top: 20px;
+  animation: wave-animation 3s ease-in-out infinite;
+}
+
+@keyframes wave-animation {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Hiệu ứng nhấp nháy cho logo */
+.animated-image {
+  animation: blink 3s linear infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+html {
+  scroll-behavior: smooth;
+}
+/* Ẩn thanh cuộn toàn trang */
+body {
+  overflow: hidden;
+}
+
+/* Nếu bạn chỉ muốn ẩn thanh cuộn ngang (horizontal) */
+body {
+  overflow-x: hidden;
+}
+
+/* Nếu bạn chỉ muốn ẩn thanh cuộn dọc (vertical) */
+body {
+  overflow-y: hidden;
+}
+/* Ẩn thanh cuộn mà vẫn giữ cuộn */
+::-webkit-scrollbar {
+  display: none;
 }

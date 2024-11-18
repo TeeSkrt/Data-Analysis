@@ -1,22 +1,40 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
 import './App.css';
 import About from './Components/About';
 import Contact from './Components/Contact';
 import Services from './Components/Services';
 
-function App() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
+function HomePage() {
+  const navigate = useNavigate();
+  const [hasNavigated, setHasNavigated] = useState(false);
 
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50 && !hasNavigated) {
+        setHasNavigated(true);
+        navigate('/data-table'); // Navigate to the data table page
+      }
+    };
 
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll); // Cleanup
+  }, [navigate, hasNavigated]);
+
+  return (
+    <div className="hero">
+      <div className="text-container">
+        <h1>SALES DATA ANALYSIS</h1>
+        <h2>ON E-COMMERCE PLATFORM</h2>
+      </div>
+      <img src="/logo-main.png" alt="Sales Data Analysis Logo" className="animated-image" />
+      <div className="wave"></div> {/* Optional: Animation */}
+    </div>
+  );
+}
+
+function DataTablePage() {
   const tableData = [
     { id: 1, name: "Product 1", sales: 1200, date: "2024-10-10" },
     { id: 2, name: "Product 2", sales: 1500, date: "2024-10-12" },
@@ -25,9 +43,39 @@ function App() {
     { id: 5, name: "Product 5", sales: 2500, date: "2024-10-20" },
   ];
 
-  const filteredData = tableData.filter(item =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  return (
+    <div className="table-container">
+      <h1>Data Table</h1>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Product Name</th>
+            <th>Sales</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tableData.map(item => (
+            <tr key={item.id}>
+              <td>{item.id}</td>
+              <td>{item.name}</td>
+              <td>{item.sales}</td>
+              <td>{item.date}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
+}
+
+function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
 
   return (
     <Router>
@@ -37,11 +85,10 @@ function App() {
           <ul className="menu">
             <li className="menu-item logo">
               <Link to="/">
-                <img src="/logo-bachkhoa.png" alt="Logo Trường Đại học Bách Khoa" className="logo-img" />
+                <img src="/logobachkhoa.png" alt="Logo" className="logo-img" />
                 Ecomlytics
               </Link>
             </li>
-
 
             <div className="menu-right">
               <li className="menu-item right"><Link to="/services">Services</Link></li>
@@ -63,52 +110,8 @@ function App() {
 
         {/* Routes */}
         <Routes>
-          <Route path="/" element={
-            <>
-              {/* Hero Section */}
-              <div className="hero">
-                <h1>SALES DATA ANALYSIS</h1>
-                <h2>ON E-COMMERCE PLATFORM</h2>
-                <img src="/path-to-your-animated-image.gif" alt="Animated Sales Data Analysis" className="animated-image" />
-              </div>
-
-              {/* Searching bar */}
-              <div className="search-container">
-                <input
-                  type="text"
-                  className="search-box"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  placeholder="Search for a product..."
-                />
-                <button className="search-btn">Search</button>
-              </div>
-
-              {/* Data Table */}
-              <div className="table-container">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Product Name</th>
-                      <th>Sales</th>
-                      <th>Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredData.map(item => (
-                      <tr key={item.id}>
-                        <td>{item.id}</td>
-                        <td>{item.name}</td>
-                        <td>{item.sales}</td>
-                        <td>{item.date}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </>
-          } />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/data-table" element={<DataTablePage />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/services" element={<Services />} />
