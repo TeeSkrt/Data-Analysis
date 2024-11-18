@@ -2,9 +2,9 @@ import React from 'react';
 
 function Services() {
     return (
-        <div>
-            <h1>Our Services</h1>
-            <p>Explore the services we offer in data analysis for e-commerce.</p>
+        <div className="services-section">
+            <h1>Services</h1>
+            <p>Some content about services...</p>
         </div>
     );
 }

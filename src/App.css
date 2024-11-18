@@ -1,344 +1,162 @@
-/* General Styles */
+/* General styling */
 body, html {
-  font-family: 'League Spartan', sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  height: 100%;
+  overflow: hidden; /* Prevent default scrolling */
+  box-sizing: border-box;
+}
+
+/* Main container for slides */
+.slides-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  padding-top: 0;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* Individual section */
+.slide {
+  height: 100vh; /* Full screen height for each slide */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  height: 100%;  /* Đảm bảo chiều cao của body và html là 100% */
-  overflow-x: hidden;  /* Ngăn cuộn ngang */
-  overflow-y: auto;  /* Cho phép cuộn dọc */
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.slide-active {
+  opacity: 1;
 }
 
 /* Navbar */
 .navbar {
-  background-color: #aec1fc;
-  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: sticky;
+  padding: 10px 20px;
+  background-color: #003c64;
+  color: white;
+  position: fixed;
   top: 0;
+  width: 100%;
   z-index: 1000;
+  box-sizing: border-box;
+  margin: 0;
 }
 
-.menu {
+.logo {
   display: flex;
   align-items: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  font-size: 24px;
+  font-weight: bold;
 }
 
-.menu-item {
-  padding: 10px 15px;
-  cursor: pointer;
-}
-
-.menu-item.logo a {
-  text-decoration: none;
-  color: #ffffff;
+.logo-text {
   font-family: 'Pacifico', cursive;
-  font-weight: bold;
-  font-size: 30px;
-  display: flex;
-  align-items: center;
+  font-size: 2rem;
+  margin-left: 10px;
 }
 
-.logo-img {
-  width: 40px;
-  height: auto;
-  margin-right: 10px;
-}
-
-.menu-right {
-  display: flex;
-  margin-left: auto;
-}
-
-.menu-item.right {
-  color: #3758be;
-  font-size: 20px;
-  font-weight: bold;
-  padding: 10px 15px;
-}
-
-.menu-item:hover {
-  background-color: #8a9ae8;
-  border-radius: 5px;
-}
-
-.hamburger-btn {
-  background: none;
-  border: none;
-  font-size: 30px;
-  color: white;
-  cursor: pointer;
-  display: none; /* Hidden by default */
-}
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 60px;
-  right: 20px;
-  background-color: #aec1fc;
+/* Navbar Links */
+.nav-links {
   list-style: none;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.dropdown-item {
-  padding: 10px 15px;
-  color: #3758be;
-  cursor: pointer;
-  font-size: 18px;
-  text-align: center;
-}
-
-.dropdown-item:hover {
-  background-color: #8a9ae8;
-  border-radius: 5px;
-}
-
-.dropdown-menu.active {
-  display: block;
-}
-
-/* Hero Section */
-.hero {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 40px;
-  background-color: #ffffff;
-  gap: 20px; /* Consistent spacing */
-  min-height: 100vh;  /* Đảm bảo phần tử hero có chiều cao ít nhất bằng chiều cao màn hình */
-  flex-wrap: wrap; /* Cho phép gói gọn nội dung khi trên màn hình nhỏ */
-  box-sizing: border-box; /* Đảm bảo không có cuộn thừa */
-}
-
-.text-container {
-  max-width: 50%;
-}
-
-.hero h1,
-.hero h2 {
+  gap: 20px;
   margin: 0;
-  padding: 0;
-  color: #3758be;
 }
 
-.hero h1 {
-  font-size: 96px; /* Adjust for responsiveness */
-  font-weight: bold;
-}
-
-.hero h2 {
-  font-size: 48px; /* Adjust for responsiveness */
-  margin-top: 10px;
-  font-weight: normal;
-}
-
-.animated-image {
-  max-width: 50%; /* Adjusted for better responsiveness */
-  height: auto;
-}
-
-/* Animation */
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-/* Search Bar */
-.search-container {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-  padding: 20px;
-}
-
-.search-box {
-  width: 100%;
-  max-width: 500px;
-  padding: 15px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-  margin-right: 10px;
-}
-
-.search-btn {
-  padding: 10px 20px;
-  background-color: #3758be;
+.nav-links li a {
   color: white;
-  border: none;
-  border-radius: 5px;
+  text-decoration: none;
+  font-size: 18px;
+  font-family: 'League Spartan', sans-serif;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.nav-links li a:hover {
+  color: #ffcc00; /* Hover effect */
+}
+
+/* Hamburger Menu (Mobile) */
+.hamburger {
+  display: none;
+  font-size: 24px;
   cursor: pointer;
-  font-size: 16px;
 }
 
-.search-btn:hover {
-  background-color: #2a4a88;
-}
-
-/* Data Table */
-.table-container {
-  width: 90%;
-  margin: 20px auto;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow-x: auto;
-  margin-top: 60px;
-  padding: 20px;  /* Thêm padding cho phần bảng để tránh bị cắt */
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table th,
-.table td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-.table th {
-  background-color: #3758be;
-  color: white;
-}
-
-.table tr:hover {
-  background-color: #f1f1f1;
-}
-
-/* Contact Page */
-.contact-page {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #f4f8ff;
-  border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  color: #3758be;
-  text-align: center;
-}
-
-.contact-title {
-  font-family: 'Red Hat Display', sans-serif;
-  color: #003c64;
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-  .menu-right {
-    display: none;
-  }
-
-  .hamburger-btn {
-    display: block;
-  }
-
-  .dropdown-menu {
-    display: none;
+@media (max-width: 768px) {
+  .nav-links {
+    flex-direction: column;
     position: absolute;
     top: 60px;
-    right: 10px;
-    flex-direction: column;
+    right: 0;
+    background-color: #003c64;
     width: 200px;
-    z-index: 100;
+    display: none;
   }
 
-  .dropdown-menu.active {
+  .nav-links.active {
     display: flex;
   }
 
-  .hero {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .animated-image {
-    max-width: 80%; /* Adjusted for mobile screens */
-    margin-top: 20px;
-  }
-
-  .hero h1 {
-    font-size: 64px; /* Smaller size for mobile */
-  }
-
-  .hero h2 {
-    font-size: 32px; /* Smaller size for mobile */
+  .hamburger {
+    display: block;
   }
 }
 
-/* Hiệu ứng sóng dưới logo */
-.wave {
-  position: relative;
+/* Home Page Content */
+.home-page {
+  text-align: center;
+  height: 100vh; /* Full height */
+  margin-top: 50px; /* To prevent content overlap with fixed navbar */
   width: 100%;
-  height: 5px;
-  background-color: #3758be; /* Màu của sóng */
+}
+
+.home-page .content h1 {
+  font-size: 3rem;
+  margin: 20px 0;
+}
+
+.home-page .content h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.home-page .content img {
+  width: 200px;
   margin-top: 20px;
-  animation: wave-animation 3s ease-in-out infinite;
 }
 
-@keyframes wave-animation {
-  0% {
-    transform: translateX(-100%);
-  }
-  50% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+/* Logo in HomePage */
+.home-page img.logo-main {
+  width: 200px;
+  margin-top: 20px;
 }
 
-/* Hiệu ứng nhấp nháy cho logo */
-.animated-image {
-  animation: blink 3s linear infinite;
+/* Scroll Transition Effects */
+.slides-container {
+  position: relative;
 }
 
-@keyframes blink {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-html {
-  scroll-behavior: smooth;
-}
-/* Ẩn thanh cuộn toàn trang */
-body {
-  overflow: hidden;
+/* For each slide, ensure full-screen width and height */
+.slide {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.5s ease;
 }
 
-/* Nếu bạn chỉ muốn ẩn thanh cuộn ngang (horizontal) */
-body {
-  overflow-x: hidden;
-}
-
-/* Nếu bạn chỉ muốn ẩn thanh cuộn dọc (vertical) */
-body {
-  overflow-y: hidden;
-}
-/* Ẩn thanh cuộn mà vẫn giữ cuộn */
-::-webkit-scrollbar {
-  display: none;
+.slide > * {
+  width: 100%;
 }

@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import './CSS/DataTable.css';
 
 function DataTable() {
-    const tableData = [
-        { id: 1, name: "Product 1", sales: 1200, date: "2024-10-10" },
-        { id: 2, name: "Product 2", sales: 1500, date: "2024-10-12" },
-        { id: 3, name: "Product 3", sales: 900, date: "2024-10-15" },
-        { id: 4, name: "Product 4", sales: 300, date: "2024-10-18" },
-        { id: 5, name: "Product 5", sales: 2500, date: "2024-10-20" },
-    ];
+    const [tableData, setTableData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    // Lấy dữ liệu từ API giả lập
+    useEffect(() => {
+        // Thay đổi URL này thành API cloud của bạn
+        fetch('https://api.example.com/products')
+            .then(response => response.json())
+            .then(data => {
+                setTableData(data);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+                setLoading(false);
+            });
+    }, []);
+
+    if (loading) {
+        return <div className="loading">Loading...</div>;
+    }
 
     return (
         <div className="table-container">

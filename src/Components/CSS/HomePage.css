@@ -1,0 +1,202 @@
+/* General styling */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100%;
+    box-sizing: border-box;
+    font-size: 18px; /* Đặt font cơ bản lớn hơn cho màn hình rộng */
+}
+
+/* Main container for the page */
+.home-page {
+    display: flex;
+    justify-content: space-between; /* Chia nội dung bên trái và bên phải */
+    align-items: center;
+    height: 100%; /* Full height for home page */
+    padding-top: 100px; /* Điều chỉnh khoảng cách trên cho navbar */
+    padding-left: flex;
+    padding-right: flex;
+    padding-bottom: flex;
+}
+
+/* Navbar styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #003c64;
+    color: white;
+    width: 100%;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 30px; /* Tăng kích thước logo và text trong navbar */
+    font-weight: bold;
+}
+
+.logo-img {
+    width: 50px;
+    margin-right: 15px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin: 0;
+}
+
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+    font-size: 22px; /* Tăng kích thước chữ trong navbar */
+    font-family: 'League Spartan', sans-serif;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.nav-links li a:hover {
+    color: #ffcc00;
+}
+
+.hamburger {
+    display: none;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+/* Content */
+.content {
+    display: 10px;
+    flex-direction: row; /* Hiển thị nội dung và logo ngang */
+    justify-content: flex-start; /* Căn chỉnh nội dung gần nhau */
+    align-items: center; /* Căn chỉnh dọc ở giữa */
+    width: 100%;
+}
+
+/* Text content in HomePage */
+.text-content {
+    display: flex;
+    flex-direction: column; /* Hiển thị theo chiều dọc */
+    justify-content: center;
+    align-items: flex-start; /* Căn trái văn bản */
+    margin-top: 20px;
+    margin-left: 50px;
+    max-width: 60%; /* Điều chỉnh độ rộng văn bản */
+}
+
+.text-content h1, .text-content h2 {
+    font-family: 'League Spartan', sans-serif;
+    color: #3758be; /* Màu sắc của văn bản */
+    margin: 5px 0; /* Điều chỉnh khoảng cách giữa các dòng */
+}
+
+.text-content h1 {
+    font-size: 5rem; /* Tăng cỡ chữ cho h1 */
+}
+
+.text-content h2 {
+    font-size: 5rem; /* Tăng cỡ chữ cho h2 */
+}
+
+/* Logo on HomePage */
+.home-page img.logo-main {
+    width: 600px; /* Tăng kích thước logo */
+    margin-top: 20px;
+    margin-left: 20px;
+    animation: blink 3s infinite, glow 1.5s ease-in-out infinite alternate; /* Hiệu ứng nhấp nháy và glow */
+}
+
+/* Keyframes for blinking effect */
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Keyframes for glow effect (hiệu ứng sáng neon) */
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 5px #3758be, 0 0 10px #3758be, 0 0 15px #3758be, 0 0 20px #ffcc00, 0 0 30px #ffcc00, 0 0 40px #ffcc00;
+    }
+    50% {
+        text-shadow: 0 0 5px #3758be, 0 0 10px #3758be, 0 0 15px #3758be, 0 0 20px #003c64, 0 0 30px #003c64, 0 0 40px #003c64;
+    }
+    100% {
+        text-shadow: 0 0 5px #3758be, 0 0 10px #3758be, 0 0 15px #3758be, 0 0 20px #ffcc00, 0 0 30px #ffcc00, 0 0 40px #ffcc00;
+    }
+}
+
+/* Add tech style lines below logo */
+.tech-effect {
+    margin-top: 20px;
+    position: relative;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #3758be, #ffcc00, #3758be); /* Tạo gradient */
+    animation: move-tech 2s linear infinite; /* Hiệu ứng di chuyển cho đường line */
+}
+
+@keyframes move-tech {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Add the tech effect line beneath the logo */
+.home-page .logo-main-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.home-page .logo-main-container::after {
+    content: '';
+    width: 100%;
+    height: 5px;
+    margin-top: 15px;
+    background: linear-gradient(90deg, #3758be, #ffcc00, #3758be);
+    animation: move-tech 2s linear infinite; /* Di chuyển hiệu ứng line */
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+    .nav-links {
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background-color: #003c64;
+        width: 200px;
+        height: auto;
+        display: none;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .hamburger {
+        display: block;
+    }
+}
+
+@media (min-width: 1440px) { /* Điều chỉnh cho màn hình lớn (17 inch, 144Hz) */
+    body, html {
+        font-size: 22px; /* Tăng font size cho màn hình lớn */
+    }
+}
