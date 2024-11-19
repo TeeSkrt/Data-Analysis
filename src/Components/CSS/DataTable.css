@@ -1,52 +1,62 @@
-/* Styling for the DataTable */
+/* Table container with style */
 .table-container {
+    width: 100%;
+    max-width: 1500px; /* Tăng chiều rộng tối đa của bảng */
+    margin: 0 auto;
     padding: 20px;
-    max-width: 80%;
-    margin: auto;
-    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd; /* Viền quanh bảng */
+    max-height: 500px; /* Tăng chiều cao tối đa để cuộn */
+    overflow-y: auto; /* Kích hoạt cuộn dọc */
+    transition: box-shadow 0.3s ease; /* Hiệu ứng khi hover vào */
 }
 
-h1 {
-    text-align: center;
-    color: #003c64;
-    margin-bottom: 20px;
-}
-
-/* Table styling */
+/* Style for table itself */
 .table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #f9f9f9;
     border-radius: 8px;
     overflow: hidden;
 }
 
-th, td {
-    padding: 12px;
-    text-align: center;
+/* Styling for header cells */
+.table th,
+.table td {
+    padding: 12px 20px; /* Thêm padding để các cột rộng hơn */
+    text-align: left;
     border: 1px solid #ddd;
-    font-size: 16px;
+    font-size: 14px;
 }
 
-th {
+/* Header background and text color */
+.table th {
     background-color: #003c64;
     color: white;
     font-weight: bold;
 }
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
+/* Alternate row colors */
+.table tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* Màu nền alternating */
 }
 
-tr:hover {
-    background-color: #ffcc00;
+/* Hover effect for rows */
+.table tbody tr:hover {
+    background-color: #f1c40f; /* Màu nền khi hover vào dòng */
     cursor: pointer;
 }
 
-/* Loading text */
+/* Loading state style */
 .loading {
+    font-size: 24px;
     text-align: center;
-    font-size: 20px;
-    color: #003c64;
-    margin-top: 50px;
+    margin-top: 20px;
+}
+
+/* Optional: Hover effect on table container for better visual feedback */
+.table-container:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng bóng khi hover vào container */
 }

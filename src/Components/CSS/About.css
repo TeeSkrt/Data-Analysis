@@ -1,0 +1,123 @@
+/* Style cho phần About */
+.about-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 0;
+    padding: 60px 20px; /* Tăng padding để nội dung không quá sát màn hình */
+    height: calc(100vh - 60px); /* Chiều cao bằng 100vh trừ đi chiều cao navbar */
+    width: 100%; /* Chiếm toàn bộ chiều rộng màn hình */
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    max-width: 100%; /* Đảm bảo phần này chiếm toàn bộ chiều rộng */
+    box-sizing: border-box;
+    margin-top: 0; /* Đảm bảo không có khoảng cách phía trên */
+}
+
+
+
+/* Tiêu đề chính About Ecomlytics */
+.about-title h1 {
+    font-size: 96px; /* Cỡ chữ rất lớn */
+    color: #003c64; /* Màu chữ */
+    font-family: 'Red Hat Display', sans-serif; /* Đổi font thành Red Hat Display */
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    z-index: 1; /* Đảm bảo nó nằm trên phần nội dung */
+    margin: 0;
+    position: absolute; /* Đặt vị trí tuyệt đối */
+    top: 0; /* Đặt phần tử sát trên cùng */
+    left: 0; /* Đặt phần tử sát bên trái */
+    line-height: 1.2;
+}
+
+
+
+/* Tiêu đề phụ */
+.about-section h2 {
+    font-size: 32px;
+    color: #003c64; /* Cùng màu với About Ecomlytics */
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    line-height: 1.4;
+}
+
+/* Đoạn mô tả */
+.about-section p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #555;
+    text-align: justify;
+    margin: 20px 0;
+    max-width: 1000px; /* Giới hạn chiều rộng để tránh bị dài quá */
+}
+
+/* Định dạng cho đoạn văn bản */
+.about-section p:hover {
+    color: #003c64;
+    cursor: pointer;
+}
+
+/* Thêm hiệu ứng cho box-shadow khi hover */
+.about-section:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Định dạng cho background của phần About */
+.about-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #003c64; /* Thay thế linear-gradient bằng màu đơn */
+    opacity: 0.1;
+    z-index: -1;
+    border-radius: 8px;
+}
+
+
+/* Đảm bảo trang dễ đọc trên thiết bị di động */
+@media screen and (max-width: 1024px) {
+    .about-section {
+        padding: 50px 15px; /* Giảm padding trên màn hình nhỏ hơn */
+    }
+
+    .about-section h1 {
+        font-size: 70px; /* Giảm kích thước chữ cho h1 */
+    }
+
+    .about-section h2 {
+        font-size: 28px; /* Giảm kích thước chữ cho h2 */
+    }
+
+    .about-section p {
+        font-size: 16px; /* Giảm kích thước chữ cho paragraph */
+    }
+}
+
+/* Cải thiện cho màn hình nhỏ hơn */
+@media screen and (max-width: 768px) {
+    .about-section {
+        padding: 30px;
+    }
+
+    .about-section h1 {
+        font-size: 48px; /* Giảm cỡ chữ cho h1 trên màn hình nhỏ */
+    }
+
+    .about-section h2 {
+        font-size: 24px;
+    }
+
+    .about-section p {
+        font-size: 14px;
+    }
+}

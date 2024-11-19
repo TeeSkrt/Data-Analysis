@@ -1,18 +1,18 @@
 import React, { useRef, useState } from 'react';
 import './App.css';
 import HomePage from './Components/HomePage';
-import About from './Components/About';
-import Contact from './Components/Contact';
-import Services from './Components/Services';
 import DataTable from './Components/DataTable';
 
 function App() {
   const sections = useRef([]); // Mảng tham chiếu cho các phần tử section
   const isScrolling = useRef(false); // Cờ để tránh cuộn không mong muốn khi đang cuộn
   const [activeSection, setActiveSection] = useState(0); // Trạng thái để theo dõi phần đang active
+  const [visibleSection, setVisibleSection] = useState('Home'); // Để theo dõi phần đang hiển thị
 
   const handleScroll = (e) => {
-    if (isScrolling.current) return; // Bỏ qua nếu đang cuộn
+    // Bỏ qua cuộn nếu không phải Home page
+    if (visibleSection !== 'Home' || isScrolling.current) return;
+
     isScrolling.current = true;
 
     const delta = e.deltaY > 0 ? 1 : -1; // Xác định hướng cuộn
@@ -32,7 +32,7 @@ function App() {
     // Đặt lại cờ sau khi cuộn hoàn tất
     setTimeout(() => {
       isScrolling.current = false;
-    }, 800); // Thời gian khớp với hiệu ứng smooth
+    }, 400); // Thời gian khớp với hiệu ứng smooth
   };
 
   return (
@@ -42,7 +42,7 @@ function App() {
         ref={(el) => (sections.current[0] = el)}
         className={`slide ${activeSection === 0 ? 'slide-active' : ''}`}
       >
-        <HomePage />
+        <HomePage setVisibleSection={setVisibleSection} />
       </section>
 
       {/* Data Table Slide */}
@@ -51,30 +51,6 @@ function App() {
         className={`slide ${activeSection === 1 ? 'slide-active' : ''}`}
       >
         <DataTable />
-      </section>
-
-      About Slide
-      <section
-        ref={(el) => (sections.current[2] = el)}
-        className={`slide ${activeSection === 2 ? 'slide-active' : ''}`}
-      >
-        <About />
-      </section>
-
-      {/* Contact Slide */}
-      <section
-        ref={(el) => (sections.current[3] = el)}
-        className={`slide ${activeSection === 3 ? 'slide-active' : ''}`}
-      >
-        <Contact />
-      </section>
-
-      {/* Services Slide */}
-      <section
-        ref={(el) => (sections.current[4] = el)}
-        className={`slide ${activeSection === 4 ? 'slide-active' : ''}`}
-      >
-        <Services />
       </section>
     </div>
   );

@@ -1,0 +1,42 @@
+/* Contact Section Styling */
+.contact-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Căn giữa nội dung */
+    justify-content: center;
+    height: 100vh; /* Đảm bảo phần này chiếm toàn bộ chiều cao màn hình */
+    background-color: #f4f4f4; /* Màu nền nhẹ */
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+/* Heading Style */
+.contact-section h1 {
+    font-family: 'Red Hat Display', sans-serif; /* Đổi font thành Red Hat Display */
+    font-size: 4rem; /* Cỡ chữ lớn */
+    color: #003c64; /* Màu chữ #003c64 */
+    margin-bottom: 20px; /* Khoảng cách dưới */
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Contact Information Style */
+.contact-section p {
+    font-family: 'DejaVu Serif', serif; /* Đổi font thành DejaVu Serif */
+    font-size: 1.5rem; /* Cỡ chữ vừa */
+    color: #000000; /* Màu chữ #000000 */
+    margin: 10px 0; /* Khoảng cách giữa các dòng */
+    text-align: center;
+}
+
+/* Responsive Design for smaller screens */
+@media (max-width: 768px) {
+    .contact-section h1 {
+        font-size: 3rem; /* Giảm cỡ chữ cho màn hình nhỏ */
+    }
+
+    .contact-section p {
+        font-size: 1.2rem; /* Giảm cỡ chữ cho đoạn văn bản */
+    }
+}

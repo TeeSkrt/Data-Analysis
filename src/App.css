@@ -4,9 +4,10 @@ body, html {
   padding: 0;
   font-family: Arial, sans-serif;
   height: 100%;
-  overflow: hidden; /* Prevent default scrolling */
+  overflow: hidden; /* Ẩn thanh cuộn */
   box-sizing: border-box;
 }
+
 
 /* Main container for slides */
 .slides-container {
@@ -16,8 +17,9 @@ body, html {
   width: 100%;
   padding-top: 0;
   position: relative;
-  overflow-y: auto;
+  overflow: hidden; /* Ẩn thanh cuộn */
 }
+
 
 /* Individual section */
 .slide {
@@ -159,4 +161,32 @@ body, html {
 
 .slide > * {
   width: 100%;
+}
+/* Navbar có vị trí cố định ở trên cùng */
+.navbar {
+  position: fixed; /* Đặt navbar ở vị trí cố định */
+  top: 0; /* Đảm bảo nó luôn ở trên cùng */
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Đảm bảo navbar không bị chồng lên các phần khác */
+  background-color: #003c64;
+  color: white;
+  padding: 15px 30px;
+}
+
+/* Điều chỉnh các phần nội dung khi navbar có position fixed */
+.slides-container {
+  margin-top: 80px; /* Tạo khoảng trống cho navbar */
+}
+
+/* Chỉnh sửa chiều cao cho mỗi slide */
+.slide {
+  height: 100vh; /* Đảm bảo mỗi slide chiếm toàn bộ chiều cao màn hình */
+  width: 100%;
+  overflow: hidden; /* Ẩn phần nào đó không cần thiết */
+}
+
+/* Hiệu ứng khi cuộn */
+.slide-active {
+  transition: transform 0.5s ease-in-out; /* Cung cấp hiệu ứng chuyển đổi */
 }
