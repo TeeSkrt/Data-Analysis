@@ -60,3 +60,18 @@
 .table-container:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng bóng khi hover vào container */
 }
+.search-bar {
+    margin-bottom: 15px;
+    padding: 10px;
+    width: 100%;
+    max-width: 400px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.no-results {
+    margin-top: 15px;
+    font-size: 16px;
+    color: #999;
+}

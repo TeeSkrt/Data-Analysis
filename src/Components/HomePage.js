@@ -1,43 +1,23 @@
+// Components/HomePage.js
 import React, { useState } from 'react';
 import './CSS/HomePage.css';
 import About from './About';
 import Contact from './Contact';
 import Services from './Services';
+import Navbar from './Navbar';
 
 function HomePage({ setVisibleSection }) {
-    const [visibleSection, setVisibleSectionState] = useState('Home'); // Local state for section visibility
+    const [visibleSection, setVisibleSectionState] = useState('Home');
+
+    const handleNavigate = (section) => {
+        setVisibleSectionState(section);
+        setVisibleSection(section);
+    };
 
     return (
         <div className="home-page">
             {/* Navbar */}
-            <nav className="navbar">
-                <div className="logo" onClick={() => {
-                    setVisibleSectionState('Home');
-                    setVisibleSection('Home');
-                }} style={{ cursor: 'pointer' }}>
-                    <img
-                        src={`${process.env.PUBLIC_URL}/logo-bachkhoa.png`}
-                        alt="Logo"
-                        className="logo-img"
-                    />
-                    Ecomlytics
-                </div>
-                <ul className="nav-links">
-                    <li><span onClick={() => {
-                        setVisibleSectionState('About');
-                        setVisibleSection('About');
-                    }} className="nav-item">About</span></li>
-                    <li><span onClick={() => {
-                        setVisibleSectionState('Services');
-                        setVisibleSection('Services');
-                    }} className="nav-item">Services</span></li>
-                    <li><span onClick={() => {
-                        setVisibleSectionState('Contact');
-                        setVisibleSection('Contact');
-                    }} className="nav-item">Contact</span></li>
-                </ul>
-                <div className="hamburger">☰</div>
-            </nav>
+            <Navbar onNavigate={handleNavigate} />
 
             {/* Nội dung hiển thị */}
             {visibleSection === 'Home' && (
@@ -52,18 +32,6 @@ function HomePage({ setVisibleSection }) {
             {visibleSection === 'About' && <About />}
             {visibleSection === 'Services' && <Services />}
             {visibleSection === 'Contact' && <Contact />}
-
-            {/* Logo và hiệu ứng công nghệ */}
-            {visibleSection === 'Home' && (
-                <div className="logo-main-container">
-                    <img
-                        src={`${process.env.PUBLIC_URL}/logo-main.png`}
-                        alt="Sales Data Analysis Logo"
-                        className="logo-main"
-                    />
-                    <div className="tech-effect"></div>
-                </div>
-            )}
         </div>
     );
 }
