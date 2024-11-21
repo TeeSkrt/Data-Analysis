@@ -10,7 +10,16 @@ function App() {
   const [visibleSection, setVisibleSection] = useState('Home'); // Để theo dõi phần đang hiển thị
 
   const handleScroll = (e) => {
-    // Bỏ qua cuộn nếu không phải Home page
+    // Kiểm tra nếu sự kiện cuộn xảy ra trong vùng bảng DataTable
+    const isInTable = e.target.closest('.table-container');
+
+    // Ngăn chặn cuộn trang nếu con trỏ chuột ở trong bảng
+    if (isInTable) {
+      e.stopPropagation();
+      return;
+    }
+
+    // Bỏ qua cuộn nếu không phải Home page hoặc đang trong quá trình cuộn
     if (visibleSection !== 'Home' || isScrolling.current) return;
 
     isScrolling.current = true;

@@ -79,14 +79,13 @@ body, html {
     cursor: pointer;
 }
 
-/* Content */
 .text-content {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: flex-start;
-    margin-top: 20px;
-    margin-left: 50px;
+    margin-top: flex;
+    margin-left: 200px;
     max-width: 60%;
 }
 
@@ -94,8 +93,13 @@ body, html {
     font-family: 'League Spartan', sans-serif;
     color: #3758be;
     margin: 5px 0;
+    white-space: nowrap; /* Ngăn ngắt dòng tự động */
 }
-
+.text-content div {
+    display: flex;
+    flex-direction: column; /* Đảm bảo mỗi dòng chữ sẽ đứng theo dạng cột */
+    margin-right: 50px; /* Khoảng cách giữa chữ và logo */
+}
 .text-content h1 {
     font-size: 5rem;
 }
@@ -104,13 +108,16 @@ body, html {
     font-size: 5rem;
 }
 
+
 /* Logo on HomePage */
 .home-page img.logo-main {
-    width: 600px;
+    width: 600px; /* Điều chỉnh kích thước logo */
     margin-top: 20px;
-    margin-left: 20px;
+    margin-left: 20px; /* Thêm khoảng cách bên trái cho logo */
     animation: blink 3s infinite, glow 1.5s ease-in-out infinite alternate;
 }
+
+
 
 @keyframes blink {
     0% {
