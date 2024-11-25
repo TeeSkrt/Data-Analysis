@@ -6,12 +6,7 @@ from .serializers import BaseSerializer
 
 class GetDataFromAzure(APIView):
     def get(self, request):
-        # Phân trang
-        paginator = PageNumberPagination()
-        paginator.page_size = 100  # Số bản ghi trên mỗi trang
-        predictions = Base.objects.all()
-        result_page = paginator.paginate_queryset(predictions, request)
-        
-        # Serialize và trả dữ liệu
-        serializer = BaseSerializer(result_page, many=True)
-        return paginator.get_paginated_response(serializer.data)
+        # Trả về 100 bản ghi đầu tiên
+        predictions = Base.objects.all()[:100]
+        serializer = BaseSerializer(predictions, many=True)
+        return Response(serializer.data)
