@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 import pyodbc
 
-def get_data(request):
+def GetDataFromAzure(request):
     # Thiết lập kết nối đến cơ sở dữ liệu SQL Server trên Azure
     conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
                           'SERVER=amazon-sql-server.database.windows.net;'
