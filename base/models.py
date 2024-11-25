@@ -28,6 +28,3 @@ class Base(models.Model):
     class Meta:
         db_table = 'Predictions'
         managed = False
-
-    def __str__(self):
-        return self.product
