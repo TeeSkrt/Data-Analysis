@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import BaseList
+from .views import GetDataFromAzure
 
 urlpatterns = [
-    path('bases/', BaseList.as_view(), name='base-list'),  # Endpoint của API
+    path('getdata/', GetDataFromAzure.as_view(), name='get-data-from-azure'),
 ]
