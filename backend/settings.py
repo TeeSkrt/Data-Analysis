@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-nd)v)_6btqx3%f7z!*ep0p4$h$ggqim!9)s^m2kukli2(v29na
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['bedata.herokuapp.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -93,15 +93,15 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mssql',  
+        'ENGINE': 'mssql',
         'NAME': 'amazon_sales',
         'USER': 'azure_sa',
         'PASSWORD': '@123456A',
         'HOST': 'amazon-sql-server.database.windows.net',
-        'PORT': '1433',  # Cổng mặc định
+        'PORT': '1433',
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
-            'extra_params': 'TrustServerCertificate=yes;',
+            'extra_params': 'TrustServerCertificate=yes;Connection Timeout=30;',
         },
     }
 }
@@ -142,6 +142,26 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles' 
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'error.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
