@@ -40,21 +40,7 @@ INSTALLED_APPS = [
     'base',
     'rest_framework',
     'corsheaders',
-    'channels',
 ]
-
-# Thêm cấu hình Channels
-ASGI_APPLICATION = 'backend.asgi.application'
-
-# Redis để xử lý WebSocket
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [('127.0.0.1', 6379)],  # Đảm bảo Redis đang chạy trên localhost
-        },
-    },
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -168,9 +154,11 @@ LOGGING = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ORIGIN_WHITELIST = [
-     'http://localhost:3000',
-     "http://127.0.0.1:3000",
-]
+CORS_ALLOWED_ALL_ORIGINS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 1000, 
+}
 
 
