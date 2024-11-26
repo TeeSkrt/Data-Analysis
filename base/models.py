@@ -26,6 +26,7 @@ class Base(models.Model):
     predicted_best_seller = models.BooleanField(default=False, db_column="Predicted_Best_Seller")
 
     class Meta:
+        managed = False
         db_table = "Predictions"  # Tên bảng trong SQL Server
         verbose_name = "Prediction"
         verbose_name_plural = "Predictions"
