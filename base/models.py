@@ -1,7 +1,7 @@
 from django.db import models
 
 class Base(models.Model):
-    asin = models.CharField(max_length=255, unique=True, default="default_asin", db_column="Asin")
+    asin = models.CharField(max_length=255, unique=True, default="default_asin", db_column="Asin", primary_key=True)
     product = models.TextField(default="No Product Description", db_column="Product")
     category_name = models.CharField(max_length=255, default="Unknown", db_column="Category_name")
     image = models.URLField(default="", db_column="Image")

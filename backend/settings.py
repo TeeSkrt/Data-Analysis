@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-nd)v)_6btqx3%f7z!*ep0p4$h$ggqim!9)s^m2kukli2(v29na'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-nd)v)_6btqx3%f7z!*ep0p4$h$ggqim!9)s^m2kukli2(v29na')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['bedata-974d797a7799.herokuapp.com', '127.0.0.1', 'localhost']
 
@@ -80,11 +81,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'amazon_sales',
-        'USER': 'azure_sa',
-        'PASSWORD': '@123456A',
-        'HOST': 'amazon-sql-server.database.windows.net',
-        'PORT': '1433',
+        'NAME': os.getenv('DB_NAME', 'amazon_sales'),
+        'USER': os.getenv('DB_USER', 'azure_sa'),
+        'PASSWORD': os.getenv('DB_PASSWORD', '@123456A'),
+        'HOST': os.getenv('DB_HOST', 'amazon-sql-server.database.windows.net'),
+        'PORT': os.getenv('DB_PORT', '1433'),
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
             'extra_params': 'TrustServerCertificate=yes;Connection Timeout=30;',
