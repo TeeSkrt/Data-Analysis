@@ -10,10 +10,10 @@ from rest_framework import status
 class GetDataFromAzure(APIView):
     def get(self, request, *args, **kwargs):
         # Lấy các biến môi trường
-        db_name = os.getenv('DB_NAME', 'amazon_sales')
-        db_user = os.getenv('DB_USER', 'azure_sa')
-        db_password = os.getenv('DB_PASSWORD', '@123456A')
-        db_host = os.getenv('DB_HOST', 'amazon-sql-server.database.windows.net')
+        db_name = os.getenv('DB_NAME')
+        db_user = os.getenv('DB_USER')
+        db_password = os.getenv('DB_PASSWORD')
+        db_host = os.getenv('DB_HOST')
         db_port = os.getenv('DB_PORT', '1433')
 
         total_records = 436449  
@@ -31,6 +31,7 @@ class GetDataFromAzure(APIView):
         # Tính toán offset cho truy vấn SQL
         offset = (page_number - 1) * page_size
 
+        conn = None
         try:
             # Kết nối tới SQL Server
             conn = pyodbc.connect(
@@ -39,13 +40,18 @@ class GetDataFromAzure(APIView):
                 f'DATABASE={db_name};'
                 f'UID={db_user};'
                 f'PWD={db_password};'
-                'TrustServerCertificate=yes;'
-                'Connection Timeout=60;'
+                'Encrypt=yes;'
+                'TrustServerCertificate=no;'
+                'Connection Timeout=30;'
             )
             cursor = conn.cursor()
 
             # Truy vấn dữ liệu (chỉ lấy 10 dòng đầu tiên)
-            query = f"SELECT * FROM Predictions ORDER BY asin OFFSET {offset} ROWS FETCH NEXT {page_size} ROWS ONLY"
+            query = f"""
+                SELECT * FROM Predictions 
+                ORDER BY asin 
+                OFFSET {offset} ROWS FETCH NEXT {page_size} ROWS ONLY
+            """
             cursor.execute(query)
             rows = cursor.fetchall()
 
@@ -84,7 +90,7 @@ class GetDataFromAzure(APIView):
 
             # Đóng kết nối
             cursor.close()
-            conn.close()
+            
             # Trả về dữ liệu dưới dạng JSON
             return Response({
                 'total_records': total_records,
@@ -93,6 +99,17 @@ class GetDataFromAzure(APIView):
                 'data': serializer.data
             }, status=status.HTTP_200_OK)
 
+        except pyodbc.Error as e:
+            # Lỗi khi kết nối cơ sở dữ liệu
+            error_message = f"Database connection failed: {str(e)}"
+            return Response({"error": error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         except Exception as e:
-            # Lỗi khi kết nối hoặc truy vấn cơ sở dữ liệu
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # Lỗi bất ngờ
+            error_message = f"Unexpected error: {str(e)}"
+            return Response({"error": error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        finally:
+            # Đảm bảo đóng kết nối cơ sở dữ liệu
+            if conn:
+                conn.close()

@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-nd)v)_6btqx3%f7z!*e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['bedata-974d797a7799.herokuapp.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['bedata-974d797a7799.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -81,14 +81,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': os.getenv('DB_NAME', 'amazon_sales'),
-        'USER': os.getenv('DB_USER', 'azure_sa'),
-        'PASSWORD': os.getenv('DB_PASSWORD', '@123456A'),
-        'HOST': os.getenv('DB_HOST', 'amazon-sql-server.database.windows.net'),
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT', '1433'),
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
-            'extra_params': 'TrustServerCertificate=yes;Connection Timeout=30;',
+            'extra_params': 'Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;',
         },
     }
 }
