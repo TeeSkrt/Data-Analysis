@@ -16,7 +16,7 @@ try:
         f'UID={db_user};'
         f'PWD={db_password};'
         'TrustServerCertificate=yes;'
-        'Connection Timeout=30;'
+        'Connection Timeout=60;'
     )
     print("Kết nối thành công!")
 except Exception as e:
