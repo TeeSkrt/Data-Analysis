@@ -1,5 +1,5 @@
 import os
-import pyodbc
+import pymssql
 import math
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -34,15 +34,13 @@ class GetDataFromAzure(APIView):
         conn = None
         try:
             # Kết nối tới SQL Server
-            conn = pyodbc.connect(
-                f'DRIVER={{ODBC Driver 17 for SQL Server}};'
-                f'SERVER={db_host},{db_port};'
-                f'DATABASE={db_name};'
-                f'UID={db_user};'
-                f'PWD={db_password};'
-                'Encrypt=yes;'
-                'TrustServerCertificate=no;'
-                'Connection Timeout=30;'
+            conn = pymssql.connect(
+                server=db_host,
+                user=db_user,
+                password=db_password,
+                database=db_name,
+                port=int(db_port),  # Chuyển port sang int
+                timeout=30
             )
             cursor = conn.cursor()
 
@@ -99,7 +97,7 @@ class GetDataFromAzure(APIView):
                 'data': serializer.data
             }, status=status.HTTP_200_OK)
 
-        except pyodbc.Error as e:
+        except pymssql.Error as e:
             # Lỗi khi kết nối cơ sở dữ liệu
             error_message = f"Database connection failed: {str(e)}"
             return Response({"error": error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
