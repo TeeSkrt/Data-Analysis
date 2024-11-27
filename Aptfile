@@ -1,5 +1,3 @@
 unixodbc-dev
 unixodbc
 freetds-dev
-curl
-./install_odbc.sh

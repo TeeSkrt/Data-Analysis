@@ -88,7 +88,7 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT', '1433'),
         'OPTIONS': {
             'driver': 'ODBC Driver 18 for SQL Server',
-            'extra_params': 'Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;',
+            'extra_params': 'Authentication=ActiveDirectoryMsi;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;',
         },
     }
 }
