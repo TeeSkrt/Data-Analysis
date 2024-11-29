@@ -87,13 +87,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': os.getenv('DB_NAME'),
-        'HOST': os.getenv('DB_SERVER'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'PORT': os.getenv('DB_PORT', '1433'), 
+        'NAME': 'amazon_sales',
+        'HOST': 'amazon-sql-server.database.windows.net',
+        'USER': 'azure_sa',
+        'PASSWORD': '@123456A',
+        'PORT': '1433', 
         'OPTIONS': {
-            'driver': 'ODBC Driver 18 for SQL Server',
+            'driver': 'ODBC Driver 17 for SQL Server',
             'encrypt': True,
             'trust_server_certificate': False,
             'extra_params': 'Authentication=ActiveDirectoryPassword',

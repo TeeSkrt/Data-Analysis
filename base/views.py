@@ -10,11 +10,11 @@ from azure.identity import ManagedIdentityCredential
 class GetDataFromAzure(APIView):
     def get(self, request, *args, **kwargs):
         # Lấy các biến môi trường
-        db_name = "amazon_sales"
-        db_host = "amazon-sql-server.database.windows.net"
-        db_user = "azure_sa"
-        db_password = "@123456A"
-        db_port = "1433"
+        server = 'amazon-sql-server.database.windows.net'
+        database = 'amazon_sales'
+        username = 'azure_sa'
+        password = '@123456A'
+        driver = 'ODBC Driver 17 for SQL Server'
 
         total_records = 436449  
         page_size = 500  
@@ -34,16 +34,8 @@ class GetDataFromAzure(APIView):
         conn = None
         try:
             # Chuỗi kết nối với Azure SQL Database qua Managed Identity
-            conn = pyodbc.connect(
-                f'DRIVER={{ODBC Driver 18 for SQL Server}};'
-                f'SERVER={db_host},{db_port};'
-                f'DATABASE={db_name};'
-                f'UID={db_user};'
-                f'PWD={db_password};'
-                'Encrypt=yes;'
-                'TrustServerCertificate=no;'
-                'Connection Timeout=30;'
-            )
+            conn_str = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
+            conn = pyodbc.connect(conn_str)          
             cursor = conn.cursor()
 
             # Truy vấn dữ liệu (chỉ lấy 10 dòng đầu tiên)
