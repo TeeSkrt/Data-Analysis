@@ -3,18 +3,18 @@ import pyodbc
 import math
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.conf import settings
 from .serializers import BaseSerializer
 from rest_framework import status
+from azure.identity import ManagedIdentityCredential
 
 class GetDataFromAzure(APIView):
     def get(self, request, *args, **kwargs):
         # Lấy các biến môi trường
-        db_name = os.getenv('DB_NAME')
-        db_user = os.getenv('DB_USER')
-        db_password = os.getenv('DB_PASSWORD')
-        db_host = os.getenv('DB_HOST')
-        db_port = os.getenv('DB_PORT', '1433')
+        db_name = "amazon_sales"
+        db_host = "amazon-sql-server.database.windows.net"
+        db_user = "azure_sa"
+        db_password = "@123456A"
+        db_port = "1433"
 
         total_records = 436449  
         page_size = 500  
@@ -33,9 +33,9 @@ class GetDataFromAzure(APIView):
 
         conn = None
         try:
-            # Kết nối tới SQL Server
+            # Chuỗi kết nối với Azure SQL Database qua Managed Identity
             conn = pyodbc.connect(
-                f'DRIVER={{ODBC Driver 17 for SQL Server}};'
+                f'DRIVER={{ODBC Driver 18 for SQL Server}};'
                 f'SERVER={db_host},{db_port};'
                 f'DATABASE={db_name};'
                 f'UID={db_user};'
