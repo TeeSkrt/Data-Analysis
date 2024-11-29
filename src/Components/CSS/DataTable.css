@@ -1,77 +1,128 @@
-/* Table container with style */
-.table-container {
+/* Container for the whole page */
+.data-table-page {
     width: 100%;
-    max-width: 1500px; /* Tăng chiều rộng tối đa của bảng */
-    margin: 0 auto;
     padding: 20px;
-    box-sizing: border-box;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd; /* Viền quanh bảng */
-    max-height: 500px; /* Tăng chiều cao tối đa để cuộn */
-    overflow-y: auto; /* Kích hoạt cuộn dọc */
-    transition: box-shadow 0.3s ease; /* Hiệu ứng khi hover vào */
+    background-color: #f0f4f8;
+    font-family: 'Arial', sans-serif;
 }
 
-/* Style for table itself */
+/* Search bar container */
+.search-bar-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    margin-top: 60px;
+}
+
+.search-bar {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+/* Search bar focus effect */
+.search-bar:focus {
+    box-shadow: 0 0 8px rgba(55, 88, 190, 0.4);
+    border-color: #3758be;
+    outline: none;
+}
+
+/* Table container styling */
+.table-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+/* Table styling */
 .table {
     width: 100%;
     border-collapse: collapse;
-    border-radius: 8px;
-    overflow: hidden;
+    font-size: 14px;
+    table-layout: fixed;
 }
 
-/* Styling for header cells */
-.table th,
-.table td {
-    padding: 12px 20px; /* Thêm padding để các cột rộng hơn */
+/* Sticky header */
+.table th {
+    position: sticky;
+    top: 0;
+    background-color: #3758be;
+    color: white;
+    padding: 15px 30px;
+    font-weight: 600;
     text-align: left;
     border: 1px solid #ddd;
-    font-size: 14px;
+    z-index: 1;  /* Đảm bảo header nổi lên trên các phần tử khác */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Thêm bóng để tạo độ nổi */
+}
+/* Table rows and cells */
+.table td {
+    padding: 5px 5px;
+    border: 1px solid #ddd;
 }
 
-/* Header background and text color */
-.table th {
-    background-color: #003c64;
+/* Alternating row colors */
+.table tbody tr:nth-child(even) {
+    background-color: #f1f5fc;
+}
+
+/* Hover effect on rows */
+.table tbody tr:hover {
+    background-color: #e8f0fe;
+    cursor: pointer;
+}
+
+/* Loading message */
+.loading {
+    font-size: 20px;
+    color: #3758be;
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* No results message */
+.no-results {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #999;
+    text-align: center;
+}
+
+/* Pagination buttons */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 5px;
+}
+
+.pagination button {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.pagination button.active {
+    background-color: #3758be;
     color: white;
     font-weight: bold;
 }
 
-/* Alternate row colors */
-.table tbody tr:nth-child(even) {
-    background-color: #f2f2f2; /* Màu nền alternating */
-}
-
-/* Hover effect for rows */
-.table tbody tr:hover {
-    background-color: #f1c40f; /* Màu nền khi hover vào dòng */
-    cursor: pointer;
-}
-
-/* Loading state style */
-.loading {
-    font-size: 24px;
-    text-align: center;
-    margin-top: 20px;
-}
-
-/* Optional: Hover effect on table container for better visual feedback */
-.table-container:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng bóng khi hover vào container */
-}
-.search-bar {
-    margin-bottom: 15px;
-    padding: 10px;
-    width: 100%;
-    max-width: 400px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.no-results {
-    margin-top: 15px;
-    font-size: 16px;
-    color: #999;
+.pagination button:hover {
+    background-color: #e8f0fe;
 }

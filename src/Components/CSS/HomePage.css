@@ -26,7 +26,7 @@ body, html {
     justify-content: space-between;
     align-items: center;
     padding: 15px 30px;
-    background-color: #003c64;
+    background-color: #aec1fc;
     color: white;
     width: 100%;
 }
@@ -34,6 +34,7 @@ body, html {
 .logo {
     display: flex;
     align-items: center;
+    font-family: 'Calistoga', sans-serif;
     font-size: 30px;
     font-weight: bold;
     cursor: pointer;
@@ -54,7 +55,7 @@ body, html {
 }
 
 .nav-item {
-    color: white;
+    color: #3758be;
     font-size: 22px;
     font-family: 'League Spartan', sans-serif;
     font-weight: bold;
@@ -84,9 +85,10 @@ body, html {
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
-    margin-top: flex;
-    margin-left: 200px;
+    margin-top: -70px;
+    margin-left: 300px;
     max-width: 60%;
+    text-align: left;
 }
 
 .text-content h1, .text-content h2 {
@@ -98,10 +100,12 @@ body, html {
 .text-content div {
     display: flex;
     flex-direction: column; /* Đảm bảo mỗi dòng chữ sẽ đứng theo dạng cột */
-    margin-right: 50px; /* Khoảng cách giữa chữ và logo */
+    margin-right: 80px; /* Khoảng cách giữa chữ và logo */
 }
 .text-content h1 {
-    font-size: 5rem;
+    font-size: 8rem;
+    font-weight : bold;
+    
 }
 
 .text-content h2 {
@@ -112,7 +116,7 @@ body, html {
 /* Logo on HomePage */
 .home-page img.logo-main {
     width: 600px; /* Điều chỉnh kích thước logo */
-    margin-top: 20px;
+    margin-top: -18px;
     margin-left: 20px; /* Thêm khoảng cách bên trái cho logo */
     animation: blink 3s infinite, glow 1.5s ease-in-out infinite alternate;
 }

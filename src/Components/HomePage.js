@@ -6,11 +6,11 @@ import Services from './Services';
 import Navbar from './Navbar';
 import logo from './CSS/logo-main.png'; // Đường dẫn đến logo-main.png
 
-function HomePage({ setVisibleSection }) {
-    const [visibleSection, setVisibleSectionState] = useState('Home');
+
+function HomePage() {
+    const [visibleSection, setVisibleSection] = useState('Home');
 
     const handleNavigate = (section) => {
-        setVisibleSectionState(section);
         setVisibleSection(section);
     };
 
@@ -24,17 +24,18 @@ function HomePage({ setVisibleSection }) {
                 <div className="text-content">
                     <div>
                         <h1>SALES</h1>
-                        <h1>DATA ANALYSIS</h1>
+                        <h2>DATA ANALYSIS</h2>
                         <h2>ON E-COMMERCE</h2>
                         <h2>PLATFORM</h2>
                     </div>
-                    <img src={logo} alt="Logo" className="logo" />
+                    <img src={logo} alt="Logo" className="logo-main" />
                 </div>
             )}
 
             {visibleSection === 'About' && <About />}
             {visibleSection === 'Services' && <Services />}
             {visibleSection === 'Contact' && <Contact />}
+
         </div>
     );
 }

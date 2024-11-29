@@ -6,7 +6,7 @@
     justify-content: center;
     height: 100vh; /* Đảm bảo phần này chiếm toàn bộ chiều cao màn hình */
     background-color: #f4f4f4; /* Màu nền nhẹ */
-    padding: 40px;
+    padding: 50px;
     box-sizing: border-box;
 }
 
@@ -19,6 +19,8 @@
     text-align: center;
     text-transform: uppercase;
     font-weight: bold;
+    margin-top: -70px;
+    margin-bottom: 30px;
 }
 
 /* Contact Information Style */
@@ -26,7 +28,8 @@
     font-family: 'DejaVu Serif', serif; /* Đổi font thành DejaVu Serif */
     font-size: 1.5rem; /* Cỡ chữ vừa */
     color: #000000; /* Màu chữ #000000 */
-    margin: 10px 0; /* Khoảng cách giữa các dòng */
+    margin: 0px ; /* Khoảng cách giữa các dòng */
+    margin-top: 10px;
     text-align: center;
 }
 

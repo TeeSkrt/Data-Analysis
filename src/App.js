@@ -2,64 +2,79 @@ import React, { useRef, useState } from 'react';
 import './App.css';
 import HomePage from './Components/HomePage';
 import DataTable from './Components/DataTable';
+import Barchart from './Charts/Barchart';
+import Navbar from './Components/Navbar';
 
 function App() {
-  const sections = useRef([]); // Mảng tham chiếu cho các phần tử section
-  const isScrolling = useRef(false); // Cờ để tránh cuộn không mong muốn khi đang cuộn
-  const [activeSection, setActiveSection] = useState(0); // Trạng thái để theo dõi phần đang active
-  const [visibleSection, setVisibleSection] = useState('Home'); // Để theo dõi phần đang hiển thị
+  const sections = useRef([]);
+  const isScrolling = useRef(false);
+  const [visibleSection, setVisibleSection] = useState('Home'); // Quản lý section hiện tại
 
+  // Hàm xử lý khi người dùng cuộn trang
   const handleScroll = (e) => {
-    // Kiểm tra nếu sự kiện cuộn xảy ra trong vùng bảng DataTable
+    // Kiểm tra nếu con trỏ chuột đang nằm trong bảng (DataTable)
     const isInTable = e.target.closest('.table-container');
-
-    // Ngăn chặn cuộn trang nếu con trỏ chuột ở trong bảng
     if (isInTable) {
-      e.stopPropagation();
+      // Nếu đang trong bảng, không cuộn trang chính
       return;
     }
 
-    // Bỏ qua cuộn nếu không phải Home page hoặc đang trong quá trình cuộn
-    if (visibleSection !== 'Home' || isScrolling.current) return;
+    if (isScrolling.current) return;
 
     isScrolling.current = true;
 
-    const delta = e.deltaY > 0 ? 1 : -1; // Xác định hướng cuộn
+    // Xác định chiều hướng cuộn: xuống (deltaY > 0) hoặc lên (deltaY < 0)
+    const delta = e.deltaY > 0 ? 1 : -1;
+
+    // Tìm index của section hiện tại đang hiển thị
     const currentIndex = sections.current.findIndex((section) => {
       const rect = section.getBoundingClientRect();
-      return rect.top < window.innerHeight / 2 && rect.top > -window.innerHeight / 2; // Điều chỉnh để xác định phần gần viewport
+      return rect.top < window.innerHeight / 2 && rect.top > -window.innerHeight / 2;
     });
 
-    // Cập nhật phần active khi cuộn
+    // Tính toán index của section kế tiếp
     const nextIndex = Math.max(0, Math.min(sections.current.length - 1, currentIndex + delta));
 
+    // Chỉ thực hiện cuộn nếu section hiện tại khác với section tiếp theo
     if (currentIndex !== nextIndex) {
-      setActiveSection(nextIndex); // Cập nhật phần active
-      sections.current[nextIndex].scrollIntoView({ behavior: 'smooth' });
+      setVisibleSection(sections.current[nextIndex].id);  // Cập nhật section hiện tại
+      sections.current[nextIndex].scrollIntoView({ behavior: 'smooth' });  // Cuộn đến section mới
     }
 
-    // Đặt lại cờ sau khi cuộn hoàn tất
+    // Chờ một khoảng thời gian trước khi có thể cuộn lại
     setTimeout(() => {
       isScrolling.current = false;
-    }, 400); // Thời gian khớp với hiệu ứng smooth
+    }, 800);  // Điều chỉnh thời gian này để đảm bảo hiệu ứng cuộn đủ mượt mà
   };
 
   return (
     <div className="slides-container" onWheel={handleScroll}>
-      {/* Home Page Slide */}
+      {/* Navbar */}
+      <Navbar onNavigate={setVisibleSection} />
+
+      {/* Các sections */}
       <section
+        id="Home"
         ref={(el) => (sections.current[0] = el)}
-        className={`slide ${activeSection === 0 ? 'slide-active' : ''}`}
+        className={`slide ${visibleSection === 'Home' ? 'slide-active' : ''}`}
       >
         <HomePage setVisibleSection={setVisibleSection} />
       </section>
 
-      {/* Data Table Slide */}
       <section
+        id="DataTable"
         ref={(el) => (sections.current[1] = el)}
-        className={`slide ${activeSection === 1 ? 'slide-active' : ''}`}
+        className={`slide ${visibleSection === 'DataTable' ? 'slide-active' : ''}`}
       >
-        <DataTable />
+        <DataTable setVisibleSection={setVisibleSection} />
+      </section>
+
+      <section
+        id="Barchart"
+        ref={(el) => (sections.current[2] = el)}
+        className={`slide ${visibleSection === 'Barchart' ? 'slide-active' : ''}`}
+      >
+        <Barchart setVisibleSection={setVisibleSection} />
       </section>
     </div>
   );

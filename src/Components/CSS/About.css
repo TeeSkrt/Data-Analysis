@@ -16,46 +16,52 @@
     max-width: 100%; /* Đảm bảo phần này chiếm toàn bộ chiều rộng */
     box-sizing: border-box;
     margin-top: 0; /* Đảm bảo không có khoảng cách phía trên */
+   
 }
 
 
 
 /* Tiêu đề chính About Ecomlytics */
+
+
 .about-title h1 {
-    font-size: 96px; /* Cỡ chữ rất lớn */
+    font-size: 60px; /* Cỡ chữ rất lớn */
     color: #003c64; /* Màu chữ */
     font-family: 'Red Hat Display', sans-serif; /* Đổi font thành Red Hat Display */
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 5px;
+    letter-spacing: 0px;
     z-index: 1; /* Đảm bảo nó nằm trên phần nội dung */
-    margin: 0;
+    margin: -20px;
+    margin-left:5px;
     position: absolute; /* Đặt vị trí tuyệt đối */
     top: 0; /* Đặt phần tử sát trên cùng */
-    left: 0; /* Đặt phần tử sát bên trái */
+    left: 90px; /* Điều chỉnh giá trị này để di chuyển h1 sang phải */
+    line-height: 1.2;
+    
+}
+
+.about-title h2 {
+    font-size: 70px; /* Cỡ chữ rất lớn */
+    color: #003c64; /* Màu chữ */
+    font-family: 'Red Hat Display', sans-serif; /* Đổi font thành Red Hat Display */
+    letter-spacing: 0px;
+    margin: -25px;
+    position: absolute; /* Đặt vị trí tuyệt đối */
+    top: 60px; /* Đặt khoảng cách từ h1 xuống */
+    left: 115px; /* Điều chỉnh giá trị này để di chuyển h3 sang phải cùng với h1 */
     line-height: 1.2;
 }
 
 
-
-/* Tiêu đề phụ */
-.about-section h2 {
-    font-size: 32px;
-    color: #003c64; /* Cùng màu với About Ecomlytics */
-    font-weight: 600;
-    margin-top: 20px;
-    margin-bottom: 30px;
-    line-height: 1.4;
-}
-
 /* Đoạn mô tả */
 .about-section p {
-    font-size: 18px;
+    font-size: 20px;
     line-height: 1.8;
     color: #555;
     text-align: justify;
     margin: 20px 0;
-    max-width: 1000px; /* Giới hạn chiều rộng để tránh bị dài quá */
+    max-width: 800px; /* Giới hạn chiều rộng để tránh bị dài quá */
+    margin-bottom: 150px;
+    
 }
 
 /* Định dạng cho đoạn văn bản */

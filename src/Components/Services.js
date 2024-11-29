@@ -1,10 +1,10 @@
 import React from 'react';
+import './CSS/Services.css'; // Đảm bảo bạn đã tạo file CSS cho component này
 
 function Services() {
     return (
         <div className="services-section">
-            <h1>Services</h1>
-            <p>Some content about services...</p>
+            <p className="description">Coming soon ...</p>
         </div>
     );
 }
