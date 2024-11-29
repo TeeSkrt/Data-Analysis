@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-nd)v)_6btqx3%f7z!*e
 DEBUG = True
 ALLOWED_HOSTS = ['localhost','127.0.0.1','bedata.azurewebsites.net']
 CSRF_TRUSTED_ORIGINS = ['https://*.azurewebsites.net']
-CORS_ALLOWED_ALL_ORIGINS : True
+CORS_ALLOWED_ALL_ORIGINS = True
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
