@@ -8,7 +8,7 @@
     padding: 60px 20px; /* Tăng padding để nội dung không quá sát màn hình */
     height: 100vh; /* Chiều cao bằng 100vh */
     width: 100%; /* Chiếm toàn bộ chiều rộng màn hình */
-    background-color: #f9f9f9; /* Màu nền nhẹ */
+    /* background-color: #c5cff1; Thay đổi màu nền */
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     position: relative;

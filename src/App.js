@@ -11,15 +11,22 @@ import Navbar from './Components/Navbar';
 function App() {
   const sections = useRef([]); // Danh sách các section
   const [visibleSection, setVisibleSection] = useState('Home'); // Section hiện tại
+  const [isInsideDataTable, setIsInsideDataTable] = useState(false); // Kiểm tra con trỏ chuột có ở trong DataTable hay không
 
   // Danh sách section cho phép cuộn
   const scrollableSections = ['Home', 'DataTable', 'Barchart'];
 
-  // Hàm xử lý cuộn
+  // Hàm xử lý cuộn trang
   const handleScroll = (e) => {
-    if (!scrollableSections.includes(visibleSection)) return; // Chỉ xử lý nếu đang ở section cuộn
-    const delta = e.deltaY > 0 ? 1 : -1;
+    if (isInsideDataTable) {
+      // Nếu sự kiện cuộn xảy ra trong bảng, ngừng sự kiện và không thực hiện cuộn trang
+      e.stopPropagation();
+      return; // Không thực hiện cuộn trang nếu trong bảng
+    }
 
+    if (!scrollableSections.includes(visibleSection)) return; // Chỉ xử lý nếu đang ở section cuộn
+
+    const delta = e.deltaY > 0 ? 1 : -1;
     const currentIndex = scrollableSections.indexOf(visibleSection);
     const nextIndex = Math.max(0, Math.min(scrollableSections.length - 1, currentIndex + delta));
     const nextSection = scrollableSections[nextIndex];
@@ -83,6 +90,9 @@ function App() {
         id="DataTable"
         ref={(el) => (sections.current[4] = el)}
         className={`slide ${visibleSection === 'DataTable' ? 'slide-active' : ''}`}
+        style={{ overflow: 'auto', maxHeight: '100vh' }} // Đảm bảo bảng có thể cuộn độc lập
+        onMouseEnter={() => setIsInsideDataTable(true)} // Khi chuột vào bảng, không cuộn trang
+        onMouseLeave={() => setIsInsideDataTable(false)} // Khi chuột ra khỏi bảng, cho phép cuộn trang
       >
         <DataTable />
       </section>

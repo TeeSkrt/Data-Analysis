@@ -7,6 +7,7 @@ function DataTable() {
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [sortAscending, setSortAscending] = useState(true); // State to handle sorting
 
     useEffect(() => {
         fetch(`https://bedata.azurewebsites.net/api/getdata/?format=json&page=${currentPage}`)
@@ -28,6 +29,23 @@ function DataTable() {
             item.avg_rating.toString().includes(searchQuery) ||
             item.asin.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    // Sorting the data by 'Predicted Best Seller'
+    const sortedData = filteredData.sort((a, b) => {
+        if (sortAscending) {
+            return a.predicted_best_seller === b.predicted_best_seller
+                ? 0
+                : a.predicted_best_seller
+                    ? -1
+                    : 1;
+        } else {
+            return a.predicted_best_seller === b.predicted_best_seller
+                ? 0
+                : a.predicted_best_seller
+                    ? 1
+                    : -1;
+        }
+    });
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -66,6 +84,12 @@ function DataTable() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
+                <button
+                    className="sort-button"
+                    onClick={() => setSortAscending((prevState) => !prevState)}
+                >
+                    Sort by Predicted Best Seller
+                </button>
             </div>
 
             <div className="table-container">
@@ -84,7 +108,7 @@ function DataTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredData.map((item) => (
+                        {sortedData.map((item) => (
                             <tr key={item.asin}>
                                 <td>
                                     <img
@@ -117,8 +141,7 @@ function DataTable() {
                                 }
                             }}
                             className={currentPage === page ? "active" : ""}
-                            disabled={page === "..."}
-                        >
+                            disabled={page === "..."}>
                             {page}
                         </button>
                     ))}
