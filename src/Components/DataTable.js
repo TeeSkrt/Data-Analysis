@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import './CSS/DataTable.css';
-import Navbar from './Navbar';
+import React, { useState, useEffect } from "react";
+import "./CSS/DataTable.css";
 
-function DataTable({ setVisibleSection }) {
+function DataTable() {
     const [tableData, setTableData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    // Fetch data from API
     useEffect(() => {
         fetch(`https://bedata.azurewebsites.net/api/getdata/?format=json&page=${currentPage}`)
             .then((response) => response.json())
@@ -22,10 +20,8 @@ function DataTable({ setVisibleSection }) {
                 console.error("Error fetching data:", error);
                 setLoading(false);
             });
-    }, [currentPage]);  // Gọi lại API khi currentPage thay đổi
+    }, [currentPage]);
 
-
-    // Filter table data based on search query
     const filteredData = tableData.filter(
         (item) =>
             item.product.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -33,47 +29,28 @@ function DataTable({ setVisibleSection }) {
             item.asin.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    // Navigate to different sections
-    const handleNavigate = (section) => {
-        setVisibleSection(section);
-    };
-
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
-    // Generate paginated page numbers
     const generatePageNumbers = () => {
-        const maxPagesToShow = 5;  // Số trang tối đa muốn hiển thị
+        const maxPagesToShow = 5;
         let pages = [];
-
         if (totalPages <= maxPagesToShow) {
-            // Nếu tổng số trang ít hơn hoặc bằng maxPagesToShow, hiển thị tất cả các trang
             for (let i = 1; i <= totalPages; i++) {
                 pages.push(i);
             }
         } else {
-            // Nếu số trang lớn hơn maxPagesToShow
             if (currentPage <= 3) {
-                // Nếu trang hiện tại ở đầu (trang 1, 2, 3)
-                pages = [1, 2, 3, 4, 5, '...', totalPages];
+                pages = [1, 2, 3, 4, 5, "...", totalPages];
             } else if (currentPage >= totalPages - 2) {
-                // Nếu trang hiện tại ở gần cuối
-                pages = [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+                pages = [1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
             } else {
-                // Nếu trang hiện tại ở giữa
-                pages = [
-                    1, '...',
-                    currentPage - 2, currentPage - 1, currentPage, currentPage + 1, currentPage + 2, '...',
-                    totalPages
-                ];
+                pages = [1, "...", currentPage - 2, currentPage - 1, currentPage, currentPage + 1, currentPage + 2, "...", totalPages];
             }
         }
-
         return pages;
     };
-
-
 
     if (loading) {
         return <div className="loading">Loading...</div>;
@@ -81,8 +58,6 @@ function DataTable({ setVisibleSection }) {
 
     return (
         <div className="data-table-page">
-            <Navbar onNavigate={handleNavigate} />
-
             <div className="search-bar-container">
                 <input
                     type="text"
@@ -116,7 +91,7 @@ function DataTable({ setVisibleSection }) {
                                         src={item.image}
                                         alt={item.product}
                                         className="product-image"
-                                        style={{ width: '50px', height: '50px' }}
+                                        style={{ width: "50px", height: "50px" }}
                                     />
                                 </td>
                                 <td>{item.asin}</td>
@@ -130,21 +105,19 @@ function DataTable({ setVisibleSection }) {
                         ))}
                     </tbody>
                 </table>
-                {filteredData.length === 0 && (
-                    <div className="no-results">No matching results found.</div>
-                )}
+                {filteredData.length === 0 && <div className="no-results">No matching results found.</div>}
 
                 <div className="pagination">
                     {generatePageNumbers().map((page, index) => (
                         <button
                             key={index}
                             onClick={() => {
-                                if (page !== '...') {
+                                if (page !== "...") {
                                     handlePageChange(page);
                                 }
                             }}
                             className={currentPage === page ? "active" : ""}
-                            disabled={page === '...'}
+                            disabled={page === "..."}
                         >
                             {page}
                         </button>

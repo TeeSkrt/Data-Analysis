@@ -63,9 +63,10 @@
     font-weight: 600;
     text-align: left;
     border: 1px solid #ddd;
-    z-index: 1;  /* Đảm bảo header nổi lên trên các phần tử khác */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Thêm bóng để tạo độ nổi */
+    z-index: 1;  /* Ensure header is on top of other elements */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Add a shadow for a floating effect */
 }
+
 /* Table rows and cells */
 .table td {
     padding: 5px 5px;

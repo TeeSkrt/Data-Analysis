@@ -3,78 +3,96 @@ import './App.css';
 import HomePage from './Components/HomePage';
 import DataTable from './Components/DataTable';
 import Barchart from './Charts/Barchart';
+import About from './Components/About';
+import Contact from './Components/Contact';
+import Services from './Components/Services';
 import Navbar from './Components/Navbar';
 
 function App() {
-  const sections = useRef([]);
-  const isScrolling = useRef(false);
-  const [visibleSection, setVisibleSection] = useState('Home'); // Quản lý section hiện tại
+  const sections = useRef([]); // Danh sách các section
+  const [visibleSection, setVisibleSection] = useState('Home'); // Section hiện tại
 
-  // Hàm xử lý khi người dùng cuộn trang
+  // Danh sách section cho phép cuộn
+  const scrollableSections = ['Home', 'DataTable', 'Barchart'];
+
+  // Hàm xử lý cuộn
   const handleScroll = (e) => {
-    // Kiểm tra nếu con trỏ chuột đang nằm trong bảng (DataTable)
-    const isInTable = e.target.closest('.table-container');
-    if (isInTable) {
-      // Nếu đang trong bảng, không cuộn trang chính
-      return;
-    }
-
-    if (isScrolling.current) return;
-
-    isScrolling.current = true;
-
-    // Xác định chiều hướng cuộn: xuống (deltaY > 0) hoặc lên (deltaY < 0)
+    if (!scrollableSections.includes(visibleSection)) return; // Chỉ xử lý nếu đang ở section cuộn
     const delta = e.deltaY > 0 ? 1 : -1;
 
-    // Tìm index của section hiện tại đang hiển thị
-    const currentIndex = sections.current.findIndex((section) => {
-      const rect = section.getBoundingClientRect();
-      return rect.top < window.innerHeight / 2 && rect.top > -window.innerHeight / 2;
-    });
+    const currentIndex = scrollableSections.indexOf(visibleSection);
+    const nextIndex = Math.max(0, Math.min(scrollableSections.length - 1, currentIndex + delta));
+    const nextSection = scrollableSections[nextIndex];
+    if (nextSection === visibleSection) return;
 
-    // Tính toán index của section kế tiếp
-    const nextIndex = Math.max(0, Math.min(sections.current.length - 1, currentIndex + delta));
-
-    // Chỉ thực hiện cuộn nếu section hiện tại khác với section tiếp theo
-    if (currentIndex !== nextIndex) {
-      setVisibleSection(sections.current[nextIndex].id);  // Cập nhật section hiện tại
-      sections.current[nextIndex].scrollIntoView({ behavior: 'smooth' });  // Cuộn đến section mới
+    const targetElement = sections.current.find((el) => el?.id === nextSection);
+    if (targetElement) {
+      setVisibleSection(nextSection);
+      targetElement.scrollIntoView({ behavior: 'smooth' });
     }
+  };
 
-    // Chờ một khoảng thời gian trước khi có thể cuộn lại
-    setTimeout(() => {
-      isScrolling.current = false;
-    }, 800);  // Điều chỉnh thời gian này để đảm bảo hiệu ứng cuộn đủ mượt mà
+  // Hàm điều hướng từ Navbar
+  const handleNavigate = (section) => {
+    const targetElement = sections.current.find((el) => el?.id === section);
+    if (targetElement) {
+      setVisibleSection(section);
+      targetElement.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
     <div className="slides-container" onWheel={handleScroll}>
       {/* Navbar */}
-      <Navbar onNavigate={setVisibleSection} />
+      <Navbar onNavigate={handleNavigate} />
 
-      {/* Các sections */}
+      {/* Sections */}
       <section
         id="Home"
         ref={(el) => (sections.current[0] = el)}
         className={`slide ${visibleSection === 'Home' ? 'slide-active' : ''}`}
       >
-        <HomePage setVisibleSection={setVisibleSection} />
+        <HomePage />
+      </section>
+
+      <section
+        id="About"
+        ref={(el) => (sections.current[1] = el)}
+        className={`slide ${visibleSection === 'About' ? 'slide-active' : ''}`}
+      >
+        <About />
+      </section>
+
+      <section
+        id="Services"
+        ref={(el) => (sections.current[2] = el)}
+        className={`slide ${visibleSection === 'Services' ? 'slide-active' : ''}`}
+      >
+        <Services />
+      </section>
+
+      <section
+        id="Contact"
+        ref={(el) => (sections.current[3] = el)}
+        className={`slide ${visibleSection === 'Contact' ? 'slide-active' : ''}`}
+      >
+        <Contact />
       </section>
 
       <section
         id="DataTable"
-        ref={(el) => (sections.current[1] = el)}
+        ref={(el) => (sections.current[4] = el)}
         className={`slide ${visibleSection === 'DataTable' ? 'slide-active' : ''}`}
       >
-        <DataTable setVisibleSection={setVisibleSection} />
+        <DataTable />
       </section>
 
       <section
         id="Barchart"
-        ref={(el) => (sections.current[2] = el)}
+        ref={(el) => (sections.current[5] = el)}
         className={`slide ${visibleSection === 'Barchart' ? 'slide-active' : ''}`}
       >
-        <Barchart setVisibleSection={setVisibleSection} />
+        <Barchart />
       </section>
     </div>
   );

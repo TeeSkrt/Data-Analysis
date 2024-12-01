@@ -19,47 +19,40 @@ function PriceClusterChart() {
         datasets: [],    // Data for price and quantity
     });
 
-    // Hàm fetch dữ liệu từ trang 1
     const fetchData = async () => {
         try {
             const response = await fetch('https://bedata.azurewebsites.net/api/getdata/?format=json&page=1');
             const data = await response.json();
-
-            // Lấy toàn bộ dữ liệu của trang 1
             const allData = data.data;
 
-            // Sắp xếp sản phẩm theo giá (theo trường 'price') và lấy top 10 sản phẩm có giá cao nhất
             const topProducts = allData
-                .sort((a, b) => b.price - a.price)  // Sắp xếp giảm dần theo giá
-                .slice(0, 10);  // Lấy top 10 sản phẩm có giá cao nhất
+                .sort((a, b) => b.price - a.price)
+                .slice(0, 10);
 
-            // Tạo nhãn cho biểu đồ (tên sản phẩm)
             const labels = topProducts.map((item) => item.product);
-
-            // Tạo dữ liệu cho biểu đồ (giá của sản phẩm và số lượng sản phẩm)
             const prices = topProducts.map((item) => item.price);
             const amounts = topProducts.map((item) => item.amount);
 
-            // Cập nhật dữ liệu cho biểu đồ
             setChartData({
                 labels,
                 datasets: [
                     {
                         label: 'Price ($)',
                         data: prices,
-                        backgroundColor: 'rgba(123, 104, 238, 1)',  // Màu sắc cho cột giá
+                        backgroundColor: 'rgba(123, 104, 238, 0.7)',  // Lighter color for better readability
                         borderColor: 'rgba(123, 104, 238, 1)',
                         borderWidth: 1,
-                        // Add bar width or group them
-                        barPercentage: 0.4,  // Control the width of the bars
+                        barPercentage: 0.35,
+                        hoverBackgroundColor: 'rgba(123, 104, 238, 1)', // Add hover effect
                     },
                     {
                         label: 'Amount',
                         data: amounts,
-                        backgroundColor: 'rgba(75, 192, 192, 1)',  // Màu sắc cho cột số lượng
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1,
-                        barPercentage: 0.4,  // Control the width of the bars
+                        barPercentage: 0.35,
+                        hoverBackgroundColor: 'rgba(75, 192, 192, 1)',
                     },
                 ],
             });
@@ -69,8 +62,8 @@ function PriceClusterChart() {
     };
 
     useEffect(() => {
-        fetchData();  // Gọi hàm fetchData khi component mount
-    }, []);  // Chạy 1 lần khi component mount
+        fetchData();
+    }, []);
 
     const options = {
         responsive: true,
@@ -79,26 +72,59 @@ function PriceClusterChart() {
                 position: 'top',
                 labels: {
                     font: {
-                        size: 14,
+                        size: 16,   // Increase font size for better readability
                     },
-                    color: 'rgba(0, 0, 0, 0.7)',
+                    color: 'rgba(0, 0, 0, 0.7)',  // Darker text for better contrast
                 },
             },
             title: {
                 display: true,
-
                 text: 'Top 10 Products by Price and Quantity',
-
+                font: {
+                    size: 20,   // Increase the font size for the title
+                },
+                color: 'rgba(0, 0, 0, 0.8)',  // Dark color for the title
+                padding: {
+                    top: 20,    // Add more space on top to ensure title is not cut off
+                    bottom: 30, // Add space below the title
+                },
             },
         },
         scales: {
+            x: {
+                grid: {
+                    display: false,  // Hide gridlines on x-axis for a cleaner look
+                },
+                ticks: {
+                    font: {
+                        size: 14,   // Adjust font size for x-axis labels
+                    },
+                },
+            },
             y: {
                 beginAtZero: true,
                 ticks: {
                     callback: function (value) {
-                        return value % 1 === 0 ? `$${value}` : value; // Hiển thị giá trị y là đơn vị tiền tệ (cho cột price)
+                        return value % 1 === 0 ? `$${value}` : value; // Display currency format for price
+                    },
+                    font: {
+                        size: 14,   // Adjust font size for y-axis labels
                     },
                 },
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.1)', // Lighter gridlines for better visibility
+                },
+            },
+        },
+        animation: {
+            duration: 1000,  // Add smooth animation duration
+            easing: 'easeInOutBounce',  // Make the animation smooth and bouncy
+        },
+        layout: {
+            padding: {
+                top: 40,   // Add padding to the top for the title to fit well
+                left: 20,  // Padding for left side
+                right: 20, // Padding for right side
             },
         },
     };

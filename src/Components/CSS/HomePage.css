@@ -15,71 +15,9 @@ body, html {
     align-items: center;
     height: 100%;
     padding-top: 100px;
-    padding-left: flex;
-    padding-right: flex;
-    padding-bottom: flex;
 }
 
-/* Navbar styling */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    background-color: #aec1fc;
-    color: white;
-    width: 100%;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    font-family: 'Calistoga', sans-serif;
-    font-size: 30px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s, text-shadow 0.3s, transform 0.2s;
-}
-
-.logo-img {
-    width: 50px;
-    margin-right: 15px;
-}
-
-/* Add hover and active effects to nav items */
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-    margin: 0;
-}
-
-.nav-item {
-    color: #3758be;
-    font-size: 22px;
-    font-family: 'League Spartan', sans-serif;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s, text-shadow 0.3s, transform 0.2s;
-}
-
-.nav-item:hover {
-    color: #ffcc00;
-    transform: scale(1.1);
-}
-
-.nav-item:active {
-    color: #3758be;
-    text-shadow: 0 0 10px #ffcc00, 0 0 15px #3758be;
-    transform: scale(0.95);
-}
-
-.hamburger {
-    display: none;
-    font-size: 30px;
-    cursor: pointer;
-}
-
+/* Text content in HomePage */
 .text-content {
     display: flex;
     flex-direction: row;
@@ -97,21 +35,21 @@ body, html {
     margin: 5px 0;
     white-space: nowrap; /* Ngăn ngắt dòng tự động */
 }
+
 .text-content div {
     display: flex;
     flex-direction: column; /* Đảm bảo mỗi dòng chữ sẽ đứng theo dạng cột */
     margin-right: 80px; /* Khoảng cách giữa chữ và logo */
 }
+
 .text-content h1 {
     font-size: 8rem;
-    font-weight : bold;
-    
+    font-weight: bold;
 }
 
 .text-content h2 {
     font-size: 5rem;
 }
-
 
 /* Logo on HomePage */
 .home-page img.logo-main {
@@ -120,8 +58,6 @@ body, html {
     margin-left: 20px; /* Thêm khoảng cách bên trái cho logo */
     animation: blink 3s infinite, glow 1.5s ease-in-out infinite alternate;
 }
-
-
 
 @keyframes blink {
     0% {
@@ -180,25 +116,4 @@ body, html {
     margin-top: 15px;
     background: linear-gradient(90deg, #3758be, #ffcc00, #3758be);
     animation: move-tech 2s linear infinite;
-}
-/* Bảng dữ liệu */
-.data-table {
-    position: absolute; /* Đặt bảng dữ liệu ở vị trí tuyệt đối */
-    bottom: 0; /* Đảm bảo bảng dữ liệu nằm dưới cùng của trang */
-    width: 100%; /* Bảng chiếm chiều rộng toàn bộ */
-    background-color: #fff; /* Nền bảng dữ liệu */
-    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ cho bảng */
-    padding: 20px; /* Padding cho bảng */
-    overflow-y: auto; /* Cho phép cuộn dọc nếu bảng có nhiều dữ liệu */
-    max-height: 300px; /* Giới hạn chiều cao của bảng */
-}
-
-/* Đảm bảo bảng không hiển thị ở các phần khác ngoài Home */
-.home-page .data-table {
-    display: none;
-}
-
-/* Khi ở HomePage, hiển thị bảng dữ liệu */
-.home-page[data-section="Home"] .data-table {
-    display: block;
 }

@@ -3,13 +3,15 @@ body, html {
     margin: 0;     /* Bỏ margin mặc định của browser */
 }
 
-.description {
+.services-section {
     display: flex;
     justify-content: center;  /* Căn giữa theo chiều ngang */
     align-items: center;      /* Căn giữa theo chiều dọc */
     font-size: 5rem;          /* Làm chữ to hơn */
     text-align: center;       /* Căn giữa chữ bên trong phần tử */
     height: 100vh;            /* Đảm bảo phần tử chiếm hết chiều cao của màn hình */
-    margin-left: 480px;
-    margin-bottom: 200px;
+}
+
+.description {
+    margin: 0;                /* Đảm bảo không có khoảng cách xung quanh chữ */
 }
