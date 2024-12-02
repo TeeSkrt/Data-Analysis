@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import BaseSerializer
 from rest_framework import status
-from azure.identity import ManagedIdentityCredential
+
 
 class GetDataFromAzure(APIView):
     def get(self, request, *args, **kwargs):
@@ -23,6 +23,8 @@ class GetDataFromAzure(APIView):
 
         # Lấy số trang từ request, mặc định là trang 1
         page_number = int(request.GET.get('page', 1))
+        search_query = request.GET.get('search', '').strip().lower() 
+        sort_predicted_best_seller = request.GET.get('sort_predicted_best_seller', 'false').lower() == 'true'  
 
         # Đảm bảo page_number không vượt quá tổng số trang
         if page_number > total_pages:
@@ -38,12 +40,18 @@ class GetDataFromAzure(APIView):
             conn = pyodbc.connect(conn_str)          
             cursor = conn.cursor()
 
-            # Truy vấn dữ liệu (chỉ lấy 10 dòng đầu tiên)
-            query = f"""
-                SELECT * FROM Predictions 
-                ORDER BY asin 
-                OFFSET {offset} ROWS FETCH NEXT {page_size} ROWS ONLY
-            """
+            query = f"SELECT * FROM Predictions WHERE 1=1"
+
+            if search_query:
+                query += f" AND LOWER(asin) LIKE '%{search_query}%'"
+
+            if sort_predicted_best_seller:
+                query += " ORDER BY predicted_best_seller DESC, asin"
+            else:
+                query += " ORDER BY asin"
+
+            query += f" OFFSET {offset} ROWS FETCH NEXT {page_size} ROWS ONLY"
+
             cursor.execute(query)
             rows = cursor.fetchall()
 
