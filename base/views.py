@@ -24,7 +24,9 @@ class GetDataFromAzure(APIView):
 
         total_pages = math.ceil(total_records / page_size)  # Tính tổng số trang
 
-        # Lấy số trang từ request, mặc định là trang 1
+        # Lấy thông tin từ request
+        sort_field = request.GET.get('sort_field', 'price')  # Giá trị mặc định là "price"
+        sort_order = request.GET.get('sort_order', 'desc')  # Mặc định là giảm dần
         page_number = int(request.GET.get('page', 1))
         search_query = request.GET.get('search', '').strip().lower()
 
@@ -42,15 +44,22 @@ class GetDataFromAzure(APIView):
             conn = pyodbc.connect(conn_str)
             cursor = conn.cursor()
 
-            # Tạo truy vấn SQL cơ bản
-            query = f"SELECT * FROM Predictions WHERE 1=1"
+            # Tạo truy vấn SQL động
+            sort_column = "Price" if sort_field == "price" else "Amount"
+            sort_direction = "DESC" if sort_order == "desc" else "ASC"
 
-            # Nếu có từ khóa search, thêm điều kiện vào truy vấn
+            # Tạo truy vấn SQL với tùy chọn tìm kiếm (nếu có)
+            query = f"""
+                SELECT * FROM Predictions
+                WHERE 1=1
+            """
             if search_query:
-                query += f" AND LOWER(asin) LIKE '%{search_query}%'"
-
-            # Thêm điều kiện phân trang
-            query += f" ORDER BY asin OFFSET {offset} ROWS FETCH NEXT {page_size} ROWS ONLY"
+                query += f" AND LOWER(asin) LIKE '%{search_query.lower()}%'"
+            
+            query += f"""
+                ORDER BY {sort_column} {sort_direction}
+                OFFSET {offset} ROWS FETCH NEXT {page_size} ROWS ONLY
+            """
 
             # Thực thi truy vấn
             cursor.execute(query)
