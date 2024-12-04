@@ -25,8 +25,8 @@ class GetDataFromAzure(APIView):
         total_pages = math.ceil(total_records / page_size)  # Tính tổng số trang
 
         # Lấy thông tin từ request
-        sort_field = request.GET.get('sort_field', 'price')  # Giá trị mặc định là "price"
-        sort_order = request.GET.get('sort_order', 'desc')  # Mặc định là giảm dần
+        sort_field = request.GET.get('sort_field')  # Giá trị mặc định là "price"
+        sort_order = request.GET.get('sort_order')  # Mặc định là giảm dần
         page_number = int(request.GET.get('page', 1))
         search_query = request.GET.get('search', '').strip().lower()
 
@@ -138,8 +138,8 @@ class SortBestSeller(APIView):
         total_pages = math.ceil(total_records / page_size)  # Tính tổng số trang
 
         # Lấy thông tin từ request
-        sort_field = request.GET.get('sort_field', 'price')  # Giá trị mặc định là "price"
-        sort_order = request.GET.get('sort_order', 'desc')  # Mặc định là giảm dần
+        sort_field = request.GET.get('sort_field')  # Giá trị mặc định là "price"
+        sort_order = request.GET.get('sort_order')  # Mặc định là giảm dần
         search_query = request.GET.get('search', '')  # Tìm kiếm theo ASIN (nếu có)
         page_number = int(request.GET.get('page', 1))
 
@@ -156,22 +156,19 @@ class SortBestSeller(APIView):
             conn = pyodbc.connect(conn_str)
             cursor = conn.cursor()
 
-            # Tạo truy vấn SQL động
-            sort_column = "Price" if sort_field == "price" else "Amount"
-            sort_direction = "DESC" if sort_order == "desc" else "ASC"
-
-            # Tạo truy vấn SQL với tùy chọn tìm kiếm (nếu có)
-            query = f"""
-                SELECT * FROM BestSeller
-                WHERE 1=1
-            """
+            # Thêm điều kiện tìm kiếm
             if search_query:
-                query += f" AND LOWER(asin) LIKE '%{search_query.lower()}%'"
+                query += f" AND LOWER(asin) LIKE '%{search_query}%'"
+
+            # Thêm điều kiện sắp xếp
+            if sort_field and sort_order:
+                sort_column = "Price" if sort_field == "price" else "Amount"
+                sort_direction = "DESC" if sort_order == "desc" else "ASC"
+                query += f" ORDER BY {sort_column} {sort_direction}"
+
+            # Thêm phân trang
+            query += f" OFFSET {offset} ROWS FETCH NEXT {page_size} ROWS ONLY"
             
-            query += f"""
-                ORDER BY {sort_column} {sort_direction}
-                OFFSET {offset} ROWS FETCH NEXT {page_size} ROWS ONLY
-            """
 
             # Thực thi truy vấn
             cursor.execute(query)
