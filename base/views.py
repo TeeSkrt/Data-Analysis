@@ -44,22 +44,21 @@ class GetDataFromAzure(APIView):
             conn = pyodbc.connect(conn_str)
             cursor = conn.cursor()
 
-            # Tạo truy vấn SQL động
-            sort_column = "Price" if sort_field == "price" else "Amount"
-            sort_direction = "DESC" if sort_order == "desc" else "ASC"
+            # Tạo truy vấn SQL mặc định
+            query = "SELECT * FROM Predictions WHERE 1=1"
 
-            # Tạo truy vấn SQL với tùy chọn tìm kiếm (nếu có)
-            query = f"""
-                SELECT * FROM Predictions
-                WHERE 1=1
-            """
+            # Thêm điều kiện tìm kiếm (nếu có)
             if search_query:
-                query += f" AND LOWER(asin) LIKE '%{search_query.lower()}%'"
-            
-            query += f"""
-                ORDER BY {sort_column} {sort_direction}
-                OFFSET {offset} ROWS FETCH NEXT {page_size} ROWS ONLY
-            """
+                query += f" AND LOWER(asin) LIKE '%{search_query}%'"
+
+            # Thêm điều kiện sắp xếp (nếu có)
+            if sort_field and sort_order:
+                sort_column = "Price" if sort_field == "price" else "Amount"
+                sort_direction = "DESC" if sort_order == "desc" else "ASC"
+                query += f" ORDER BY {sort_column} {sort_direction}"
+
+            # Thêm phân trang
+            query += f" OFFSET {offset} ROWS FETCH NEXT {page_size} ROWS ONLY"
 
             # Thực thi truy vấn
             cursor.execute(query)
@@ -155,6 +154,9 @@ class SortBestSeller(APIView):
             conn_str = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
             conn = pyodbc.connect(conn_str)
             cursor = conn.cursor()
+
+            # Tạo truy vấn SQL mặc định
+            query = "SELECT * FROM BestSeller WHERE 1=1"
 
             # Thêm điều kiện tìm kiếm
             if search_query:
