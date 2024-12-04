@@ -123,14 +123,22 @@ class SortBestSeller(APIView):
         username = 'azure_sa'
         password = '@123456A'
 
+        total_records = 56604 # Tổng số sản phẩm
+        page_size = 500  # Kích thước trang
+
+        total_pages = math.ceil(total_records / page_size)  # Tính tổng số trang
+
         # Lấy thông tin từ request
         sort_field = request.GET.get('sort_field', 'price')  # Giá trị mặc định là "price"
         sort_order = request.GET.get('sort_order', 'desc')  # Mặc định là giảm dần
         search_query = request.GET.get('search', '')  # Tìm kiếm theo ASIN (nếu có)
-        page_size = 500
         page_number = int(request.GET.get('page', 1))
 
-        # Offset cho phân trang
+        # Đảm bảo page_number không vượt quá tổng số trang
+        if page_number > total_pages:
+            page_number = total_pages
+
+        # Tính toán offset cho truy vấn SQL
         offset = (page_number - 1) * page_size
 
         conn = None
@@ -192,9 +200,12 @@ class SortBestSeller(APIView):
             # Dữ liệu qua serializer
             serializer = BaseSerializer(data, many=True)
 
-            # Trả về JSON
+            # Đóng kết nối
+            cursor.close()
+
             return Response({
-                'total_records': len(data),
+                'total_records': total_records,
+                'total_pages': total_pages,
                 'current_page': page_number,
                 'data': serializer.data
             }, status=status.HTTP_200_OK)
