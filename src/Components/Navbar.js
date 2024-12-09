@@ -1,9 +1,9 @@
 import React from 'react';
 import './CSS/Navbar.css'; // Đảm bảo đã có file CSS
 
-function Navbar({ onNavigate }) {
+function Navbar({ onNavigate, navbarBgColor }) {
     return (
-        <nav className="navbar">
+        <nav className="navbar" style={{ backgroundColor: navbarBgColor }}>
             <div
                 className="logo"
                 style={{ cursor: 'pointer' }}

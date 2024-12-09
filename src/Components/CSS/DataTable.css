@@ -2,7 +2,6 @@
 .data-table-page {
     width: 100%;
     padding: 20px;
-    background-color: #f0f4f8;
     font-family: 'Arial', sans-serif;
 }
 
@@ -41,9 +40,10 @@
     border-radius: 10px;
     border: 1px solid #ddd;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    max-height: 450px;
-    overflow-y: auto;
+    max-height: 450px; /* Giới hạn chiều cao */
+    overflow-y: auto; /* Cho phép cuộn dọc */
 }
+
 
 /* Table styling */
 .table {

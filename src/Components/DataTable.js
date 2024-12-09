@@ -7,10 +7,14 @@ function DataTable() {
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [sortAscending, setSortAscending] = useState(true); // State to handle sorting
+    const [sortField, setSortField] = useState(""); // Không gán giá trị mặc định là "price"
+    const [sortOrder, setSortOrder] = useState("desc"); // Thứ tự sắp xếp mặc định
+    const [apiUrl, setApiUrl] = useState(`https://bedata.azurewebsites.net/api/getdata/?page=1`);
 
+    // Fetch dữ liệu từ API mỗi khi URL thay đổi
     useEffect(() => {
-        fetch(`https://bedata.azurewebsites.net/api/getdata/?format=json&page=${currentPage}`)
+        setLoading(true);
+        fetch(apiUrl)
             .then((response) => response.json())
             .then((data) => {
                 setTableData(data.data);
@@ -21,34 +25,64 @@ function DataTable() {
                 console.error("Error fetching data:", error);
                 setLoading(false);
             });
-    }, [currentPage]);
+    }, [apiUrl]);
 
-    const filteredData = tableData.filter(
-        (item) =>
-            item.product.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            item.avg_rating.toString().includes(searchQuery) ||
-            item.asin.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // Hàm xử lý sắp xếp theo trường dữ liệu bất kỳ
+    const handleSort = (field) => {
+        const newOrder = sortOrder === "desc" ? "asc" : "desc"; // Toggle thứ tự
+        setSortField(field);
+        setSortOrder(newOrder);
 
-    // Sorting the data by 'Predicted Best Seller'
-    const sortedData = filteredData.sort((a, b) => {
-        if (sortAscending) {
-            return a.predicted_best_seller === b.predicted_best_seller
-                ? 0
-                : a.predicted_best_seller
-                    ? -1
-                    : 1;
-        } else {
-            return a.predicted_best_seller === b.predicted_best_seller
-                ? 0
-                : a.predicted_best_seller
-                    ? 1
-                    : -1;
-        }
-    });
+        const searchParam = searchQuery ? `&search=${searchQuery}` : "";
+        const baseApiUrl = apiUrl.includes("/sort/")
+            ? "https://bedata.azurewebsites.net/api/getdata/sort/"
+            : "https://bedata.azurewebsites.net/api/getdata/";
+
+        setApiUrl(`${baseApiUrl}?page=1${searchParam}&sort_field=${field}&sort_order=${newOrder}`);
+    };
+
+    // Hàm xử lý sắp xếp theo Best Seller (dùng nút)
+    const handleSortByBestSeller = () => {
+        setSortField("predicted_best_seller");
+        setSortOrder("desc"); // Best Seller chỉ có giảm dần
+        const searchParam = searchQuery ? `&search=${searchQuery}` : "";
+        setApiUrl(`https://bedata.azurewebsites.net/api/getdata/sort/?page=1${searchParam}&sort_field=predicted_best_seller&sort_order=desc`);
+    };
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
+        const searchParam = searchQuery ? `&search=${searchQuery}` : "";
+
+        // Nếu không muốn sắp xếp mặc định, reset sortField và sortOrder
+        if (!sortField) {
+            setSortField(""); // Reset lại trường sắp xếp
+            setSortOrder(""); // Reset lại thứ tự mặc định
+        }
+
+        const baseApiUrl = apiUrl.includes("/sort/")
+            ? "https://bedata.azurewebsites.net/api/getdata/sort/"
+            : "https://bedata.azurewebsites.net/api/getdata/";
+
+        setApiUrl(`${baseApiUrl}?page=${page}${searchParam}${sortField ? `&sort_field=${sortField}&sort_order=${sortOrder}` : ""}`);
+    };
+
+    const resetToDefaultAPI = () => {
+        setSearchQuery("");
+        setCurrentPage(1);
+        setSortField(""); // Đặt lại `sortField` thành chuỗi rỗng
+        setSortOrder("desc");
+        setApiUrl(`https://bedata.azurewebsites.net/api/getdata/?page=1`);
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+        setCurrentPage(1);
+        const searchParam = e.target.value ? `&search=${e.target.value}` : "";
+        const baseApiUrl = apiUrl.includes("/sort/")
+            ? "https://bedata.azurewebsites.net/api/getdata/sort/"
+            : "https://bedata.azurewebsites.net/api/getdata/";
+
+        setApiUrl(`${baseApiUrl}?page=1${searchParam}${sortField ? `&sort_field=${sortField}&sort_order=${sortOrder}` : ""}`);
     };
 
     const generatePageNumbers = () => {
@@ -82,13 +116,13 @@ function DataTable() {
                     className="search-bar"
                     placeholder="Search..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={handleSearchChange}
                 />
-                <button
-                    className="sort-button"
-                    onClick={() => setSortAscending((prevState) => !prevState)}
-                >
+                <button className="sort-button" onClick={handleSortByBestSeller}>
                     Sort by Predicted Best Seller
+                </button>
+                <button className="reset-button" onClick={resetToDefaultAPI}>
+                    Reset
                 </button>
             </div>
 
@@ -100,15 +134,25 @@ function DataTable() {
                             <th>Image</th>
                             <th>ASIN</th>
                             <th>Product</th>
-                            <th>Price</th>
+                            <th
+                                onClick={() => handleSort("price")}
+                                style={{ cursor: "pointer" }}
+                            >
+                                Price {sortField === "price" && (sortOrder === "desc" ? "↓" : "↑")}
+                            </th>
                             <th>Rating</th>
                             <th>Review</th>
-                            <th>Amount</th>
+                            <th
+                                onClick={() => handleSort("amount")}
+                                style={{ cursor: "pointer" }}
+                            >
+                                Amount {sortField === "amount" && (sortOrder === "desc" ? "↓" : "↑")}
+                            </th>
                             <th>Predicted Best Seller</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {sortedData.map((item) => (
+                        {tableData.map((item) => (
                             <tr key={item.asin}>
                                 <td>
                                     <img
@@ -129,19 +173,15 @@ function DataTable() {
                         ))}
                     </tbody>
                 </table>
-                {filteredData.length === 0 && <div className="no-results">No matching results found.</div>}
+                {tableData.length === 0 && <div className="no-results">No matching results found.</div>}
 
                 <div className="pagination">
                     {generatePageNumbers().map((page, index) => (
                         <button
                             key={index}
-                            onClick={() => {
-                                if (page !== "...") {
-                                    handlePageChange(page);
-                                }
-                            }}
+                            onClick={() => handlePageChange(page)}
                             className={currentPage === page ? "active" : ""}
-                            disabled={page === "..."}>
+                            disabled={page === "..."} >
                             {page}
                         </button>
                     ))}

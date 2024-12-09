@@ -51,7 +51,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #003c64; /* Màu nền */
+    /* background-color: #003c64; Màu nền */
     opacity: 0.1;
     z-index: -1;
     border-radius: 8px;

@@ -1,8 +1,12 @@
+/* Đảm bảo không có khoảng cách ngoài body và áp dụng font chung */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   overflow: hidden; /* Chặn cuộn bên ngoài container */
-  height: 100vh;
+  height: 100vh; /* Đảm bảo body luôn có chiều cao đầy đủ */
+  display: flex; /* Đảm bảo nội dung có thể căn giữa */
+  flex-direction: column;
+  background-color: #ffffff; 
 }
 
 /* Container chính chứa các slide */
@@ -12,24 +16,52 @@ body {
   height: 100%;
   width: 100%;
   overflow: hidden; /* Đảm bảo chỉ cuộn trong cơ chế đã định */
-  margin-top: 60px;
+  margin-top: 60px; /* Giữ khoảng cách nếu cần thiết */
 }
 
 /* Mỗi slide */
 .slide {
-  height: 100vh; /* Chiều cao màn hình */
+  height: 100vh; /* Chiều cao của mỗi slide chiếm toàn bộ chiều cao màn hình */
   width: 100%;
-  display: flex; /* Đảm bảo luôn tồn tại trong DOM */
+  display: flex;
   justify-content: center;
   align-items: center;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
   pointer-events: none; /* Ngăn tương tác với các slide không được kích hoạt */
+  position: relative;
 }
 
 /* Slide hiện tại */
 .slide-active {
-  display: flex; /* Đảm bảo hiển thị */
   opacity: 1;
   pointer-events: auto; /* Cho phép tương tác */
+}
+
+/* Đảm bảo responsive với các màn hình nhỏ */
+@media screen and (max-width: 1024px) {
+  .slides-container {
+    margin-top: 50px; /* Điều chỉnh nếu navbar có thay đổi */
+  }
+  .slide {
+    height: 90vh; /* Giảm chiều cao của slide để phù hợp với màn hình nhỏ hơn */
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .slides-container {
+    margin-top: 40px; /* Điều chỉnh margin-top khi ở màn hình nhỏ hơn */
+  }
+  .slide {
+    height: 85vh; /* Điều chỉnh chiều cao của slide */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .slides-container {
+    margin-top: 30px; /* Điều chỉnh margin-top khi ở màn hình nhỏ nhất */
+  }
+  .slide {
+    height: 80vh; /* Điều chỉnh chiều cao của slide */
+  }
 }

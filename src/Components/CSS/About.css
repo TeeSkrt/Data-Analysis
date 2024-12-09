@@ -15,6 +15,7 @@
     position: relative;
     max-width: 100%;
     box-sizing: border-box;
+    
 }
 
 
@@ -89,7 +90,7 @@
     margin-top: 10px;
     padding: 10px;
     border-radius: 8px;
-    background-image: url('./pinky.png'); /* Thêm hình ảnh làm nền */
+    /* background-image: url('./pinky.png');  */
     background-size: cover;
     background-position: center;
     height: 400px;
