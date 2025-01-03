@@ -1,3 +1,4 @@
+import shap
 import pandas as pd
 import numpy as np
 import optuna
@@ -227,12 +228,12 @@ def objective(trial):
     score = roc_auc_score(y_valid, y_pred)
     return score
 
-# Tuning với Optuna
-print("Tuning hyperparameters using Optuna...")
-study = optuna.create_study(direction='maximize')
-study.optimize(objective, n_trials=100)
-best_params = study.best_params
-best_params['n_estimators'] = 1000  
+# # Tuning với Optuna
+# print("Tuning hyperparameters using Optuna...")
+# study = optuna.create_study(direction='maximize')
+# study.optimize(objective, n_trials=100)
+# best_params = study.best_params
+# best_params['n_estimators'] = 500  
 
 # Các hyperparameter đã điều chỉnh nhằm giảm overfitting
 best_params = {
@@ -249,7 +250,7 @@ best_params = {
     'feature_fraction': 0.5,  
     'reg_alpha': 7,  
     'reg_lambda': 15, 
-    'n_estimators': 500  
+    'n_estimators': 700  
 }
 
 # Khởi tạo mô hình với các hyperparameters đã điều chỉnh
@@ -275,6 +276,94 @@ def evaluate_model(model, X_data, y_data, dataset_name):
 evaluate_model(lgb_model, X_train, y_train, "Training")
 evaluate_model(lgb_model, X_valid, y_valid, "Validation")
 evaluate_model(lgb_model, X_test, y_test, "Test")
+
+# SHAP: Phân tích tầm quan trọng của đặc trưng
+print("Explaining model predictions with SHAP...")
+# Sử dụng TreeExplainer cho mô hình LightGBM
+explainer = shap.TreeExplainer(lgb_model)
+
+# Tạo giá trị SHAP cho tập kiểm tra
+shap_values = explainer.shap_values(X_test)
+
+# Kiểm tra và xử lý định dạng SHAP values
+if isinstance(shap_values, list):
+    if len(shap_values) == 2:  # Trường hợp định dạng cũ
+        shap_values_class_1 = shap_values[1]  # Giá trị SHAP cho lớp 1 (Best Seller = 1)
+        expected_value_class_1 = explainer.expected_value[1]
+    elif len(shap_values) == 1:  # Trường hợp định dạng mới
+        shap_values_class_1 = shap_values[0]  # Giá trị SHAP duy nhất cho lớp 1
+        expected_value_class_1 = explainer.expected_value
+    else:
+        raise ValueError("SHAP values có số lượng không hợp lệ!")
+elif isinstance(shap_values, np.ndarray):  # Một số phiên bản SHAP chỉ trả về mảng numpy
+    shap_values_class_1 = shap_values
+    expected_value_class_1 = explainer.expected_value
+else:
+    raise ValueError("SHAP values không đúng định dạng mong đợi!")
+
+# 1. Hiển thị force plot cho 5 mẫu đầu tiên và lưu thành HTML
+print("Generating SHAP force plots for the first 5 samples...")
+for i in range(5):
+    force_plot_path = f"shap_force_plot_sample_{i + 1}.html"
+    shap.save_html(force_plot_path, shap.force_plot(
+        expected_value_class_1,
+        shap_values_class_1[i, :],
+        X_test.iloc[i, :]
+    ))
+    print(f"SHAP force plot for sample {i + 1} saved to {force_plot_path}")
+
+# Tầm quan trọng trung bình của các đặc trưng
+print("Generating SHAP summary plot (bar)...")
+plt.figure()
+shap.summary_plot(shap_values_class_1, X_test, plot_type="bar", show=False)
+plt.savefig("shap_summary_bar.png", bbox_inches='tight')
+print("SHAP summary plot (bar) saved to shap_summary_bar.png")
+
+# Đóng góp của từng đặc trưng
+print("Generating SHAP summary plot (detailed scatter)...")
+plt.figure()
+shap.summary_plot(shap_values_class_1, X_test, show=False)
+plt.savefig("shap_summary_scatter.png", bbox_inches='tight')
+print("SHAP summary plot (scatter) saved to shap_summary_scatter.png")
+
+# Dependence plot cho một số đặc trưng quan trọng
+print("Generating SHAP dependence plots for selected features...")
+important_features = ["Rating", "Popularity_Global_Ratio", "Relative_Popularity"]
+for feature in important_features:
+    plt.figure()
+    shap.dependence_plot(feature, shap_values_class_1, X_test, show=False)
+    plot_path = f"shap_dependence_{feature}.png"
+    plt.savefig(plot_path, bbox_inches='tight')
+    print(f"SHAP dependence plot for feature {feature} saved to {plot_path}")
+
+# Tính độ quan trọng trung bình của từng đặc trưng
+shap_importance = np.abs(shap_values_class_1).mean(axis=0)
+importance_df = pd.DataFrame({
+    'Feature': X_test.columns,
+    'Mean SHAP Value': shap_importance
+}).sort_values(by='Mean SHAP Value', ascending=False)
+
+importance_csv_path = "shap_feature_importance.csv"
+importance_df.to_csv(importance_csv_path, index=False)
+print(f"Feature importance exported to {importance_csv_path}")
+
+# Phân tích các mẫu dự đoán là "Best Seller" và không phải "Best Seller"
+print("Analyzing SHAP values for predicted groups...")
+y_pred = lgb_model.predict(X_test)
+group_1 = shap_values_class_1[y_pred == 1]  # Mẫu dự đoán là Best Seller
+group_0 = shap_values_class_1[y_pred == 0]  # Mẫu không phải Best Seller
+
+mean_shap_group_1 = np.abs(group_1).mean(axis=0)
+mean_shap_group_0 = np.abs(group_0).mean(axis=0)
+group_analysis_df = pd.DataFrame({
+    'Feature': X_test.columns,
+    'Mean SHAP (Best Seller)': mean_shap_group_1,
+    'Mean SHAP (Non-Best Seller)': mean_shap_group_0
+}).sort_values(by='Mean SHAP (Best Seller)', ascending=False)
+
+group_analysis_csv_path = "shap_group_analysis.csv"
+group_analysis_df.to_csv(group_analysis_csv_path, index=False)
+print(f"Group analysis exported to {group_analysis_csv_path}")
 
 # Cross-Validation với Stratified K-Fold
 print("Performing Cross-Validation with Stratified K-Fold...")
@@ -433,94 +522,114 @@ df_combined.to_csv('F:/VSCode/Python/Python385/Code Space/Analyst/final.csv', in
 lgb_model.booster_.save_model('lgb_model.txt')
 print(f"Model and data are saved")
 
-# UPLOAD TO AZURE SQL SERVER
-# Thông tin kết nối đến Azure SQL
-print("Connecting to Azure SQL...")
-server = 'amazon-sql-server.database.windows.net'
-database = 'amazon_sales'
-username = 'azure_sa'
-password = '@123456A'
-driver = 'ODBC Driver 17 for SQL Server'
+# # UPLOAD TO AZURE SQL SERVER
+# # Thông tin kết nối đến Azure SQL
+# print("Connecting to Azure SQL...")
+# server = 'amazon-sql-server.database.windows.net'
+# database = 'amazon_sales'
+# username = 'azure_sa'
+# password = '@123456A'
+# driver = 'ODBC Driver 17 for SQL Server'
 
-conn_str = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
-conn = pyodbc.connect(conn_str)
-cursor = conn.cursor()
+# conn_str = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
+# conn = pyodbc.connect(conn_str)
+# cursor = conn.cursor()
 
-# Xóa bảng nếu tồn tại
-drop_table_query = "DROP TABLE IF EXISTS Predictions"
-cursor.execute(drop_table_query)
+# # Danh sách các file CSV và tên bảng tương ứng
+# files_and_tables = [
+#     ('F:/VSCode/Python/Python385/Code Space/Analyst/final.csv', 'Predictions'),
+#     ('F:/VSCode/Python/Python385/Code Space/Analyst/best_seller.csv', 'BestSeller')
+    
+# ]
 
-# Tạo bảng mới
-print("Creating table Predictions...")
-create_table_query = """
-CREATE TABLE Predictions (
-    Asin VARCHAR(50),
-    Product VARCHAR(500),
-    Category_name VARCHAR(255),
-    Image VARCHAR(255),
-    Rating FLOAT,
-    Avg_rating FLOAT,
-    Review INT,
-    Avg_review FLOAT,
-    Price FLOAT,
-    Avg_price FLOAT,
-    Price_Ratio FLOAT,
-    Review_Rating_Ratio FLOAT,
-    Relative_Popularity FLOAT,
-    Review_Avg_Review_Ratio FLOAT,
-    Price_Amount_Ratio FLOAT,
-    Rating_Review_Ratio FLOAT,
-    Popularity_Global_Ratio FLOAT,
-    Popularity_Category_Max_Ratio FLOAT,
-    Price_Rating_Interaction FLOAT,
-    Review_Amount_Interaction FLOAT,
-    Combined_Interaction FLOAT,
-    Amount INT,
-    Predicted_Best_Seller VARCHAR(5) -- TRUE or FALSE
-)
-"""
-cursor.execute(create_table_query)
-conn.commit()
+# # Hàm xử lý từng file
+# def process(file_path, table_name):
+#     print(f"Processing file: {file_path}")
 
-# Chuẩn bị câu lệnh INSERT
-print("Uploading data to Azure SQL...")
-insert_query = """
-    INSERT INTO Predictions (
-        Asin, Product, Category_name, Image, Rating, Avg_rating, Review, Avg_review,
-        Price, Avg_price, Price_Ratio, Review_Rating_Ratio, Relative_Popularity, 
-        Review_Avg_Review_Ratio, Price_Amount_Ratio, Rating_Review_Ratio, 
-        Popularity_Global_Ratio, Popularity_Category_Max_Ratio, 
-        Price_Rating_Interaction, Review_Amount_Interaction, Combined_Interaction, 
-        Amount, Predicted_Best_Seller
-    )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-"""
+#     # Đọc file CSV
+#     df_combined = pd.read_csv(file_path)
 
-# Chuyển DataFrame thành danh sách tuple
-print("Converting DataFrame to list of tuples...")
-data_tuples = [
-    (
-        row['Asin'], row['Product'], row['Category name'], row['Image'],
-        row['Rating'], row['Avg_rating'], row['Review'], row['Avg_review'],
-        row['Price'], row['Avg_price'], row['Price_Ratio'], row['Review_Rating_Ratio'],
-        row['Relative_Popularity'], row['Review_Avg_Review_Ratio'], row['Price_Amount_Ratio'],
-        row['Rating_Review_Ratio'], row['Popularity_Global_Ratio'], row['Popularity_Category_Max_Ratio'],
-        row['Price_Rating_Interaction'], row['Review_Amount_Interaction'], row['Combined_Interaction'],
-        row['Amount'], row['Predicted Best Seller']
-    )
-    for _, row in df_combined.iterrows()
-]
+#     # Xóa bảng nếu tồn tại
+#     drop_table_query = f"DROP TABLE IF EXISTS {table_name}"
+#     cursor.execute(drop_table_query)
 
-# Gửi dữ liệu theo batch với tqdm
-batch_size = 1000
-with tqdm(total=len(data_tuples), desc="Uploading to Azure SQL") as pbar:
-    for i in range(0, len(data_tuples), batch_size):
-        batch = data_tuples[i:i + batch_size]
-        cursor.executemany(insert_query, batch)  # Gửi batch
-        conn.commit()  # Commit sau mỗi batch
-        pbar.update(len(batch))  # Cập nhật tiến trình
+#     # Tạo bảng mới
+#     print(f"Creating table {table_name}...")
+#     create_table_query = f"""
+#     CREATE TABLE {table_name} (
+#         Asin VARCHAR(50),
+#         Product VARCHAR(500),
+#         Category_name VARCHAR(255),
+#         Image VARCHAR(255),
+#         Rating FLOAT,
+#         Avg_rating FLOAT,
+#         Review INT,
+#         Avg_review FLOAT,
+#         Price FLOAT,
+#         Avg_price FLOAT,
+#         Price_Ratio FLOAT,
+#         Review_Rating_Ratio FLOAT,
+#         Relative_Popularity FLOAT,
+#         Review_Avg_Review_Ratio FLOAT,
+#         Price_Amount_Ratio FLOAT,
+#         Rating_Review_Ratio FLOAT,
+#         Popularity_Global_Ratio FLOAT,
+#         Popularity_Category_Max_Ratio FLOAT,
+#         Price_Rating_Interaction FLOAT,
+#         Review_Amount_Interaction FLOAT,
+#         Combined_Interaction FLOAT,
+#         Amount INT,
+#         Predicted_Best_Seller VARCHAR(5) -- TRUE or FALSE
+#     )
+#     """
+#     cursor.execute(create_table_query)
+#     conn.commit()
 
-# Kết thúc
-print("Data has been uploaded successfully.")
-cursor.close()
-conn.close()
+#     # Chuẩn bị câu lệnh INSERT
+#     print(f"Uploading data to table {table_name}...")
+#     insert_query = f"""
+#         INSERT INTO {table_name} (
+#             Asin, Product, Category_name, Image, Rating, Avg_rating, Review, Avg_review,
+#             Price, Avg_price, Price_Ratio, Review_Rating_Ratio, Relative_Popularity, 
+#             Review_Avg_Review_Ratio, Price_Amount_Ratio, Rating_Review_Ratio, 
+#             Popularity_Global_Ratio, Popularity_Category_Max_Ratio, 
+#             Price_Rating_Interaction, Review_Amount_Interaction, Combined_Interaction, 
+#             Amount, Predicted_Best_Seller
+#         )
+#         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+#     """
+
+#     # Chuyển DataFrame thành danh sách tuple
+#     print("Converting DataFrame to list of tuples...")
+#     data_tuples = [
+#         (
+#             row['Asin'], row['Product'], row['Category name'], row['Image'],
+#             row['Rating'], row['Avg_rating'], row['Review'], row['Avg_review'],
+#             row['Price'], row['Avg_price'], row['Price_Ratio'], row['Review_Rating_Ratio'],
+#             row['Relative_Popularity'], row['Review_Avg_Review_Ratio'], row['Price_Amount_Ratio'],
+#             row['Rating_Review_Ratio'], row['Popularity_Global_Ratio'], row['Popularity_Category_Max_Ratio'],
+#             row['Price_Rating_Interaction'], row['Review_Amount_Interaction'], row['Combined_Interaction'],
+#             row['Amount'], row['Predicted Best Seller']
+#         )
+#         for _, row in df_combined.iterrows()
+#     ]
+
+#     # Gửi dữ liệu theo batch với tqdm
+#     batch_size = 1000
+#     with tqdm(total=len(data_tuples), desc=f"Uploading to {table_name}") as pbar:
+#         for i in range(0, len(data_tuples), batch_size):
+#             batch = data_tuples[i:i + batch_size]
+#             cursor.executemany(insert_query, batch)  # Gửi batch
+#             conn.commit()  # Commit sau mỗi batch
+#             pbar.update(len(batch))  # Cập nhật tiến trình
+
+#     print(f"Data has been uploaded to table {table_name} successfully.")
+
+# # Xử lý từng file và bảng
+# for file_path, table_name in files_and_tables:
+#     process(file_path, table_name)
+
+# # Kết thúc
+# cursor.close()
+# conn.close()
+# print("All files have been processed.")
