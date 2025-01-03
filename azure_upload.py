@@ -16,8 +16,8 @@ cursor = conn.cursor()
 
 # Danh sách các file CSV và tên bảng tương ứng
 files_and_tables = [
-    ('F:/VSCode/Python/Python385/Code Space/Analyst/final.csv', 'Predictions'),
-    ('F:/VSCode/Python/Python385/Code Space/Analyst/best_seller.csv', 'BestSeller')
+    ('C:/Users/ADMIN/Desktop/DATN/Data/Analyst/final.csv', 'Predictions'),
+    ('C:/Users/ADMIN/Desktop/DATN/Data/Analyst/best_seller.csv', 'BestSeller')
     
 ]
 
